@@ -22,6 +22,7 @@ public:
 
   void print_list();
   LinkedList() : head(nullptr) {}
+  ~LinkedList();
 };
 
 #endif

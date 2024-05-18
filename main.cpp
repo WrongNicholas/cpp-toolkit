@@ -2,11 +2,13 @@
 
 int main() {
   LinkedList linkedList;
-  for (int i = 0; i < 10; i++) {
-    linkedList.push_front(i);
+  for (int i = 0; i < 99; i++) {
+    linkedList.push_back(i);
   }
   
-  linkedList.remove_all(-4);
+  for (int i = 0; i < 99; i += 2) {
+    linkedList.remove_all(i);
+  }
 
   linkedList.print_list();
 

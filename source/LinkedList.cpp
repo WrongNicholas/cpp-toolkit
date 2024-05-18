@@ -75,11 +75,21 @@ void LinkedList::print_list() {
     return;
   }
 
-  ListNode* node = this->head;
+  ListNode* current = this->head;
   std::cout << "[";
-  while (node->next != nullptr) {
-    std::cout << node->value << ", ";
-    node = node->next;
+  while (current->next != nullptr) {
+    std::cout << current->value << ", ";
+    current = current->next;
   }
-  std::cout << node->value << "]" << std::endl;
+  std::cout << current->value << "]" << std::endl;
+}
+
+LinkedList::~LinkedList() {
+  ListNode* current = this->head;
+
+  while (current != nullptr) {
+    ListNode* next = current->next;
+    delete current;
+    current = next;
+  }
 }
