@@ -1,6 +1,6 @@
 #include "LinkedList.h"
 
-void LinkedList::addFirst(int index) {
+void LinkedList::push_front(int index) {
   ListNode* node = new ListNode(index);
   
   if (this->first == nullptr) {
@@ -12,7 +12,7 @@ void LinkedList::addFirst(int index) {
   this->first = node;
 }
 
-void LinkedList::addLast(int value) {
+void LinkedList::push_back(int value) {
   // Initialize ListNode
   ListNode* node = new ListNode(value);
 
@@ -29,7 +29,7 @@ void LinkedList::addLast(int value) {
   temp->next = node;
 }
 
-int LinkedList::get(int index) {
+int LinkedList::at(int index) {
   ListNode* node = this->first;
   for (int i = 0; i < index; i++) {
     node = node->next;

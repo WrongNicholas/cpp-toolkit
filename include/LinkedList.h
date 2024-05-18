@@ -11,11 +11,11 @@ private:
   ListNode* first;
 public:
   // Accessors
-  int get(int index);
+  int at(int index);
   
   // Add methods
-  void addLast(int value);
-  void addFirst(int value);
+  void push_back(int value);
+  void push_front(int value);
 
   void print();
   LinkedList() : first(nullptr) {}
