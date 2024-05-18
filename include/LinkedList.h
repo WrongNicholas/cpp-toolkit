@@ -10,8 +10,12 @@ class LinkedList {
 private:
   ListNode* first;
 public:
-  void add(int value);
+  // Accessors
   int get(int index);
+  
+  // Add methods
+  void addLast(int value);
+  void addFirst(int value);
 
   void print();
   LinkedList() : first(nullptr) {}

@@ -1,9 +1,21 @@
 #include "LinkedList.h"
 
-void LinkedList::add(int value) {
+void LinkedList::addFirst(int index) {
+  ListNode* node = new ListNode(index);
+  
+  if (this->first == nullptr) {
+    this->first = node;
+    return;
+  }
+
+  node->next = this->first;
+  this->first = node;
+}
+
+void LinkedList::addLast(int value) {
   // Initialize ListNode
   ListNode* node = new ListNode(value);
- 
+
   if (this->first == nullptr) {
     this->first = node;
     return;
