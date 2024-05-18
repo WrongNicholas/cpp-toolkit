@@ -1,3 +1,6 @@
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
+
 class ListNode {
 public:
   int value;
@@ -8,15 +11,17 @@ public:
 
 class LinkedList {
 private:
-  ListNode* first;
+  ListNode* head;
 public:
-  // Accessors
   int at(int index);
   
-  // Add methods
   void push_back(int value);
   void push_front(int value);
 
-  void print();
-  LinkedList() : first(nullptr) {}
+  void remove_all(int value);
+
+  void print_list();
+  LinkedList() : head(nullptr) {}
 };
+
+#endif
