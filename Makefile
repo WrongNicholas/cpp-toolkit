@@ -1,44 +1,35 @@
-# Compiler
-CC = gcc
-
-# Flags
-CXXFLAGS = -std=c++17 -I$(INC_DIR)
-LDFLAGS = -lstdc++
-
-# Directories
-SRC_DIR = source
-INC_DIR = include
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall
+TARGET = cpp-toolkit
 BUILD_DIR = build
 
-# Collect source files
-SOURCES := $(wildcard $(SRC_DIR)/*.cpp)
-OBJS := $(addprefix $(BUILD_DIR)/, $(notdir $(SOURCES:.cpp=.o)))
+SRCS = main.cpp LinkedList/LinkedList.cpp
+OBJS = $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 
-# Executable name
-EXECUTABLE = $(BUILD_DIR)/DataStructures
+# Default target
+all: $(BUILD_DIR) $(BUILD_DIR)/$(TARGET)
 
-# Set default target
-all: $(EXECUTABLE)
-
-# Make rule for object files into executable
-$(EXECUTABLE): $(OBJS) $(BUILD_DIR)/main.o
+# Create build directory if it doesn't exist
+$(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
-	$(CC) $^ -o $@ $(LDFLAGS)
+	@mkdir -p $(BUILD_DIR)/LinkedList
 
-# Make objects from source files
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(BUILD_DIR)
-	$(CC) $(CXXFLAGS) -c $< -o $@
+# Build the final executable
+$(BUILD_DIR)/$(TARGET): $(OBJS)
+	@$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
+	@echo "Build $(TARGET)"
 
-# Special rule for main.cpp
-$(BUILD_DIR)/main.o: main.cpp
-	@mkdir -p $(BUILD_DIR)
-	$(CC) $(CXXFLAGS) -c $< -o $@
+# Compile source files to object files in the build directory
+$(BUILD_DIR)/%.o: %.cpp
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
+# Run the program
+run: all
+	@./$(BUILD_DIR)/$(TARGET)
+
+# Clean up build directory
 clean:
-	rm -rf $(BUILD_DIR)
-
-run: $(EXECUTABLE)
-	./$(EXECUTABLE)
+	@rm -rf $(BUILD_DIR)
+	@echo "Clean build directory"
 
 .PHONY: all clean run
