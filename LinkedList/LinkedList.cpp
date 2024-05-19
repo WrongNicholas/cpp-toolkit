@@ -69,6 +69,36 @@ void LinkedList::remove_all(int value) {
   }
 }
 
+void LinkedList::pop_front() {
+  if (this->head == nullptr) {
+    return;
+  }
+
+  ListNode* temp = this->head;
+  this->head = this->head->next;
+  delete temp;
+}
+
+void LinkedList::pop_back() {
+  if (this->head == nullptr) {
+    return;
+  }
+
+  if (this->head->next == nullptr) {
+    delete this->head;
+    this->head = nullptr;
+    return;
+  }
+
+  ListNode* temp = this->head;
+  while (temp->next->next != nullptr) {
+    temp = temp->next;
+  }
+
+  delete temp->next;
+  temp->next = nullptr;
+}
+
 #include <iostream>
 void LinkedList::print_list() {
   if (this->head == nullptr) {
@@ -76,12 +106,11 @@ void LinkedList::print_list() {
   }
 
   ListNode* current = this->head;
-  std::cout << "[";
-  while (current->next != nullptr) {
-    std::cout << current->value << ", ";
+  while (current != nullptr) {
+    std::cout << current->value << " ";
     current = current->next;
   }
-  std::cout << current->value << "]" << std::endl;
+  std::cout << std::endl;
 }
 
 LinkedList::~LinkedList() {
