@@ -1,4 +1,5 @@
 #include "LinkedList/LinkedList.h"
+#include <iostream>
 
 int main() {
   LinkedList linkedList;
@@ -20,6 +21,8 @@ int main() {
   copiedLinkedList.pop_back();
   copiedLinkedList.pop_front();
   copiedLinkedList.print_list();
+
+  std::cout << copiedLinkedList.front() << " " << copiedLinkedList.back() << std::endl;
 
   return 0;
 }

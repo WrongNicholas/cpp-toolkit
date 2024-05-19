@@ -19,8 +19,8 @@ public:
   int back();
 
   // Mutators
-  void push_back(int value);
   void push_front(int value);
+  void push_back(int value);
 
   void remove_all(int value);
   void pop_front();

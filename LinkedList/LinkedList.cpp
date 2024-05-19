@@ -1,5 +1,30 @@
 #include "LinkedList.h"
 
+// Return value at index
+int LinkedList::at(int index) {
+  ListNode* node = this->head;
+  for (int i = 0; i < index; i++) {
+    node = node->next;
+  }
+  int value = node->value;
+  return value;
+}
+
+// Return value at front
+int LinkedList::front() {
+  return this->head->value;
+}
+
+// Return value at back
+int LinkedList::back() {
+  ListNode* current = this->head;
+  while (current->next != nullptr) {
+    current = current->next;
+  }
+
+  return current->value;
+}
+
 // Add new element to front of list
 void LinkedList::push_front(int index) {
   ListNode* node = new ListNode(index);
@@ -29,16 +54,6 @@ void LinkedList::push_back(int value) {
   }
 
   temp->next = node;
-}
-
-// Return value at index
-int LinkedList::at(int index) {
-  ListNode* node = this->head;
-  for (int i = 0; i < index; i++) {
-    node = node->next;
-  }
-  int value = node->value;
-  return value;
 }
 
 // Remove all element(s) from list
@@ -73,7 +88,7 @@ void LinkedList::remove_all(int value) {
   }
 }
 
-// Remove element from front of list
+// Remove element at front of list
 void LinkedList::pop_front() {
   if (this->head == nullptr) {
     return;
@@ -84,7 +99,7 @@ void LinkedList::pop_front() {
   delete temp;
 }
 
-// Remove element from end of list
+// Remove element at end of list
 void LinkedList::pop_back() {
   if (this->head == nullptr) {
     return;
