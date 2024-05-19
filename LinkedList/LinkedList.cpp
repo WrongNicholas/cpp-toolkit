@@ -1,5 +1,6 @@
 #include "LinkedList.h"
 
+// Add new element to front of list
 void LinkedList::push_front(int index) {
   ListNode* node = new ListNode(index);
   
@@ -12,6 +13,7 @@ void LinkedList::push_front(int index) {
   this->head = node;
 }
 
+// Add new element to end of list
 void LinkedList::push_back(int value) {
   // Initialize ListNode
   ListNode* node = new ListNode(value);
@@ -29,6 +31,7 @@ void LinkedList::push_back(int value) {
   temp->next = node;
 }
 
+// Return value at index
 int LinkedList::at(int index) {
   ListNode* node = this->head;
   for (int i = 0; i < index; i++) {
@@ -38,6 +41,7 @@ int LinkedList::at(int index) {
   return value;
 }
 
+// Remove all element(s) from list
 void LinkedList::remove_all(int value) {
   if (this->head == nullptr) {
     return;
@@ -69,6 +73,7 @@ void LinkedList::remove_all(int value) {
   }
 }
 
+// Remove element from front of list
 void LinkedList::pop_front() {
   if (this->head == nullptr) {
     return;
@@ -79,6 +84,7 @@ void LinkedList::pop_front() {
   delete temp;
 }
 
+// Remove element from end of list
 void LinkedList::pop_back() {
   if (this->head == nullptr) {
     return;
@@ -99,6 +105,7 @@ void LinkedList::pop_back() {
   temp->next = nullptr;
 }
 
+// Print list
 #include <iostream>
 void LinkedList::print_list() {
   if (this->head == nullptr) {
@@ -112,6 +119,9 @@ void LinkedList::print_list() {
   }
   std::cout << std::endl;
 }
+
+// Default Constructor
+LinkedList::LinkedList() : head(nullptr) { }
 
 // Copy Constructor
 LinkedList::LinkedList(const LinkedList& other) {

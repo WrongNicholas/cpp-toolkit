@@ -1,8 +1,8 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
-class ListNode {
-public:
+
+struct ListNode {
   int value;
   ListNode* next;
 
@@ -13,8 +13,12 @@ class LinkedList {
 private:
   ListNode* head;
 public:
+  // Accessors
   int at(int index);
-  
+  int front();
+  int back();
+
+  // Mutators
   void push_back(int value);
   void push_front(int value);
 
@@ -22,8 +26,11 @@ public:
   void pop_front();
   void pop_back();
 
+  // Utility
   void print_list();
-  LinkedList() : head(nullptr) {}
+  
+  // Constructors
+  LinkedList();
   LinkedList(const LinkedList &other);
   ~LinkedList();
 };
