@@ -24,6 +24,7 @@ public:
 
   void print_list();
   LinkedList() : head(nullptr) {}
+  LinkedList(const LinkedList &other);
   ~LinkedList();
 };
 

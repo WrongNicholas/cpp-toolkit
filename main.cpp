@@ -15,5 +15,11 @@ int main() {
 
   linkedList.print_list();
 
+  // Test Copy Constructor
+  LinkedList copiedLinkedList(linkedList);
+  copiedLinkedList.pop_back();
+  copiedLinkedList.pop_front();
+  copiedLinkedList.print_list();
+
   return 0;
 }

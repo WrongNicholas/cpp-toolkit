@@ -113,6 +113,24 @@ void LinkedList::print_list() {
   std::cout << std::endl;
 }
 
+// Copy Constructor
+LinkedList::LinkedList(const LinkedList& other) {
+  if (other.head == nullptr) {
+    return;
+  }
+
+  ListNode* current = new ListNode(other.head->value);
+  this->head = current;
+
+  ListNode* temp = other.head->next;
+  while (temp != nullptr) {
+    current->next = new ListNode(temp->value);
+    current = current->next;
+    temp = temp->next;
+  }
+}
+
+// Deconstructor
 LinkedList::~LinkedList() {
   ListNode* current = this->head;
 
