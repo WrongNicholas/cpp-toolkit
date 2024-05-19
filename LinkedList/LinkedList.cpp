@@ -56,6 +56,23 @@ void LinkedList::push_back(int value) {
   temp->next = node;
 }
 
+// Add new element at index
+void LinkedList::insert(int index, int value) {
+  if (index == 0) {
+    this->push_front(value);
+    return;
+  }
+
+  ListNode* current = this->head;
+  for (int i = 1; i < index; i++) {
+    current = current->next;
+  }
+
+  ListNode* temp = current->next;
+  current->next = new ListNode(value);
+  current->next->next = temp;
+}
+
 // Remove all element(s) from list
 void LinkedList::remove_all(int value) {
   if (this->head == nullptr) {
