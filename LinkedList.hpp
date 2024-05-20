@@ -1,5 +1,16 @@
+// ----------------------------------------------------------
+// LinkedList.hpp
+//
+// This header file defines a templated, singly-linked list
+// class named LinkedList. It provides methods for adding,
+// removing, and accessing elements in the list.
+// ----------------------------------------------------------
+
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
+
+#include <stdexcept>
+#include <iostream>
 
 // Struct defining a node in linked list
 template <typename T>
@@ -18,36 +29,67 @@ private:
 public:                                    
   // Constructors and Destructor           
   LinkedList<T>();                            // Default constructor
-  LinkedList<T>(const LinkedList<T> &other);     // Copy constructor
+  LinkedList<T>(const LinkedList<T> &other);  // Copy constructor
   ~LinkedList<T>();                           // Destructor
-
+  
   // Accessors
-  T& value_at(int index);                 // Returns value stored at specific index
-  T& front();                             // Returns value at list head
-  T& back();                              // Returns value at list tail
-  T& operator[](int index);              // Overloaded subscript operator
+  T& value_at(int index);                     // Returns value stored at specific index
+  T& front();                                 // Returns value at list head
+  T& back();                                  // Returns value at list tail
+  T& operator[](int index);                   // Overloaded subscript operator
 
-  int size() const;                        // Returns number of elements
-  bool empty() const;                      // Checks if list empty
+  int size() const;                           // Returns number of elements
+  bool empty() const;                         // Checks if list empty
 
   // Mutators
-  void push_front(const T& value);              // Adds new element at head
-  void push_back(const T& value);               // Adds new element at tail
-  void insert(int index, const T& value);       // Adds new element at specified index
+  void push_front(const T& value);            // Adds new element at head
+  void push_back(const T& value);             // Adds new element at tail
+  void insert(int index, const T& value);     // Adds new element at specified index
   
-  void remove_all(const T& value);              // Removes all elements of value
-  void pop_front();                        // Removes head element
-  void pop_back();                         // Removes tail element
-  void clear();                            // Removes all elements
+  void remove_all(const T& value);            // Removes all elements of value
+  void pop_front();                           // Removes head element
+  void pop_back();                            // Removes tail element
+  void clear();                               // Removes all elements
 
   // Utility
-  int find(const T& value) const;               // Finds index of first occurance of value
-  void print_list();                       // Prints all elements
+  int find(const T& value) const;             // Finds index of first occurance of value
+  void print_list();                          // Prints all elements
 };
 
-#include <stdexcept>
+template <typename T>
+LinkedList<T>::LinkedList() {
+  // Initialize head to nullptr
+  this->head = nullptr;
+}
 
-// Return value at index
+template <typename T>
+LinkedList<T>::LinkedList(const LinkedList& other) {
+  if (other.head == nullptr) {
+    return;
+  }
+
+  ListNode<T>* current = new ListNode(other.head->value);
+  this->head = current;
+
+  ListNode<T>* temp = other.head->next;
+  while (temp != nullptr) {
+    current->next = new ListNode(temp->value);
+    current = current->next;
+    temp = temp->next;
+  }
+}
+
+template <typename T>
+LinkedList<T>::~LinkedList() {
+  // Traverse list and delete each node
+  ListNode<T>* current = this->head;
+  while (current != nullptr) {
+    ListNode<T>* next = current->next;
+    delete current;
+    current = next;
+  }
+}
+
 template <typename T>
 T& LinkedList<T>::value_at(int index) {
   // Check if index is within lower range
@@ -74,7 +116,6 @@ T& LinkedList<T>::value_at(int index) {
   throw std::out_of_range("Index out of range");
 }
 
-// Return value at front of list
 template <typename T>
 T& LinkedList<T>::front() {
   // Check if list is empty
@@ -86,7 +127,6 @@ T& LinkedList<T>::front() {
   return this->head->value;
 }
 
-// Return value at back of list
 template <typename T>
 T& LinkedList<T>::back() {
   // Check if list is empty
@@ -104,7 +144,6 @@ T& LinkedList<T>::back() {
   return current->value;
 }
 
-// Overload subscript operator
 template <typename T>
 T& LinkedList<T>::operator[](int index) {
   // Check if index is within lower range
@@ -130,7 +169,6 @@ T& LinkedList<T>::operator[](int index) {
   throw std::out_of_range("Index out of range");
 }
 
-// Return number of elements
 template <typename T>
 int LinkedList<T>::size() const {
   
@@ -151,7 +189,6 @@ bool LinkedList<T>::empty() const {
   return this->head == nullptr;
 }
 
-// Add new element to front of list
 template <typename T>
 void LinkedList<T>::push_front(const T& value) {
   // Make new node with provided value 
@@ -170,7 +207,6 @@ void LinkedList<T>::push_front(const T& value) {
   this->head = node;
 }
 
-// Add new element to end of list
 template <typename T>
 void LinkedList<T>::push_back(const T& value) {
   // Initialize ListNode
@@ -192,7 +228,6 @@ void LinkedList<T>::push_back(const T& value) {
   temp->next = node;
 }
 
-// Add new element at index
 template <typename T>
 void LinkedList<T>::insert(int index, const T& value) {
   if (index < 0) {
@@ -223,7 +258,6 @@ void LinkedList<T>::insert(int index, const T& value) {
   current->next = node;
 }
 
-// Remove all element(s) of value from list
 template <typename T>
 void LinkedList<T>::remove_all(const T& value) {
   // Check if list empty
@@ -259,7 +293,6 @@ void LinkedList<T>::remove_all(const T& value) {
   }
 }
 
-// Remove element at front of list
 template <typename T>
 void LinkedList<T>::pop_front() {
   // Check if list empty
@@ -273,7 +306,6 @@ void LinkedList<T>::pop_front() {
   delete temp;
 }
 
-// Remove element at end of list
 template <typename T>
 void LinkedList<T>::pop_back() {
   // Check if list empty
@@ -299,7 +331,6 @@ void LinkedList<T>::pop_back() {
   temp->next = nullptr;
 }
 
-// Clear list
 template <typename T>
 void LinkedList<T>::clear() {
   // Traverse list and delete  nodes
@@ -314,7 +345,6 @@ void LinkedList<T>::clear() {
   this->head = nullptr;
 }
 
-// Find index of first occurance of value
 template <typename T>
 int LinkedList<T>::find(const T& value) const {
   // Traverse until desired value found
@@ -332,8 +362,7 @@ int LinkedList<T>::find(const T& value) const {
   throw std::runtime_error("Value not found");
 }
 
-// Print list
-#include <iostream>
+
 template <typename T>
 void LinkedList<T>::print_list() {
   // Check if list empty
@@ -350,43 +379,6 @@ void LinkedList<T>::print_list() {
   }
 
   std::cout << std::endl;
-}
-
-// Default Constructor
-template <typename T>
-LinkedList<T>::LinkedList() {
-  // Initialize head to nullptr
-  this->head = nullptr;
-}
-
-// Copy Constructor
-template <typename T>
-LinkedList<T>::LinkedList(const LinkedList& other) {
-  if (other.head == nullptr) {
-    return;
-  }
-
-  ListNode<T>* current = new ListNode(other.head->value);
-  this->head = current;
-
-  ListNode<T>* temp = other.head->next;
-  while (temp != nullptr) {
-    current->next = new ListNode(temp->value);
-    current = current->next;
-    temp = temp->next;
-  }
-}
-
-// Destructor
-template <typename T>
-LinkedList<T>::~LinkedList() {
-  // Traverse list and delete each node
-  ListNode<T>* current = this->head;
-  while (current != nullptr) {
-    ListNode<T>* next = current->next;
-    delete current;
-    current = next;
-  }
 }
 
 #endif
