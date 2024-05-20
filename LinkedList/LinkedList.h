@@ -20,7 +20,7 @@ public:
   ~LinkedList();                           // Destructor
 
   // Accessors
-  int value_at(int index);           // Returns value stored at specific index
+  int value_at(int index);                 // Returns value stored at specific index
   int front();                             // Returns value at list head
   int back();                              // Returns value at list tail
   int& operator[](int index);              // Overloaded subscript operator
