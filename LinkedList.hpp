@@ -23,74 +23,76 @@ struct ListNode {
 
 // Class representing singly linked list
 template <typename T>
-class LinkedList {
+class LinkedList {                                          // Element description 
 private:
-  ListNode<T>* head;                          // Pointer to first node in list 
+  ListNode<T>* head;                                        // Pointer to first node in list
+  ListNode<T>* tail;                                        // Pointer to last node in list
 
   ListNode<T>* get_node_at(int index) const;
 public:                                    
   // Constructors and Destructor           
-  LinkedList<T>();                            // Default constructor
-  LinkedList<T>(const LinkedList<T> &other);  // Copy constructor
-  ~LinkedList<T>();                           // Destructor
-  
+  LinkedList<T>();                                          // Default constructor
+  LinkedList<T>(const LinkedList<T> &other);                // Copy constructor
+  ~LinkedList<T>();                                         // Destructor
+   
   // Accessors
-  T& value_at(int index);                     // Returns value stored at specific index
-  T& front();                                 // Returns value at list head
-  T& back();                                  // Returns value at list tail
-  T& operator[](int index);                   // Overloaded subscript operator
+  T& value_at(int index);                                   // Returns value stored at specific index
+  T& front();                                               // Returns value at list head
+  T& back();                                                // Returns value at list tail
+  T& operator[](int index);                                 // Overloaded subscript operator
 
-  int size() const;                           // Returns number of elements
-  bool empty() const;                         // Checks if list empty
+  int size() const;                                         // Returns number of elements
+  bool empty() const;                                       // Checks if list empty
 
   // Mutators
-  void push_front(const T& value);            // Adds new element at head
-  void push_back(const T& value);             // Adds new element at tail
-  void insert(int index, const T& value);     // Adds new element at specified index
-  
-  void remove_all(const T& value);            // Removes all elements of value
-  void pop_front();                           // Removes head element
-  void pop_back();                            // Removes tail element
-  void clear();                               // Removes all elements
+  void push_front(const T& value);                          // Adds new element at head
+  void push_back(const T& value);                           // Adds new element at tail
+  void insert(int index, const T& value);                   // Adds new element at specified index
+
+  void remove_all(const T& value);                          // Removes all elements of value
+  void remove_at(int index);                                // Removes an element at specified index
+  void pop_front();                                         // Removes head element
+  void pop_back();                                          // Removes tail element
+  void clear();                                             // Removes all elements
 
   // Utility
-  int find(const T& value) const;             // Finds index of first occurance of value
-  void print_list();                          // Prints all elements
+  int find(const T& value) const;                           // Finds index of first occurance of value
+  bool contains(const T& value) const;                      // Returns if element found in list
+  void print_list();                                        // Prints all elements
 };
 
 template <typename T>
 LinkedList<T>::LinkedList() {
-  // Initialize head to nullptr
+  // Initialize head and tail to nullptr
   this->head = nullptr;
+  this->tail = nullptr;
 }
 
 template <typename T>
-LinkedList<T>::LinkedList(const LinkedList& other) {
+LinkedList<T>::LinkedList(const LinkedList& other) : head(nullptr), tail(nullptr) {
+  // Check if other list is empty
   if (other.head == nullptr) {
     return;
   }
-
-  ListNode<T>* current = new ListNode(other.head->value);
-  this->head = current;
-
+  
+  // Traverse list and copy values
+  this->head = new ListNode<T>(other.head->value);
+  ListNode<T>* current = this->head;
   ListNode<T>* temp = other.head->next;
   while (temp != nullptr) {
-    current->next = new ListNode(temp->value);
+    current->next = new ListNode<T>(temp->value);
     current = current->next;
     temp = temp->next;
   }
+
+  // Set tail once reaching end of list
+  this->tail = current;
 }
 
 template <typename T>
 LinkedList<T>::~LinkedList() {
-  // Traverse list and delete each node
-  ListNode<T>* current = this->head;
-  while (current != nullptr) {
-    ListNode<T>* next = current->next;
-    delete current;
-    current = next;
-  }
-}
+  clear();
+} 
 
 template <typename T>
 ListNode<T>* LinkedList<T>::get_node_at(int index) const {
@@ -180,9 +182,10 @@ void LinkedList<T>::push_front(const T& value) {
   // Make new node with provided value 
   ListNode<T>* node = new ListNode(value);
   
-  // Give value to head if list empty
+  // Give value to head and tail if list empty
   if (this->head == nullptr) {
     this->head = node;
+    this->tail = node;
 
     // Return because I'm a never-nester (shout out CodeAesthetic)
     return;
@@ -197,21 +200,17 @@ template <typename T>
 void LinkedList<T>::push_back(const T& value) {
   // Initialize ListNode
   ListNode<T>* node = new ListNode(value);
-
-  // Check if list empty
+  
+  // Give value to head and tail if list empty
   if (this->head == nullptr) {
     this->head = node;
+    this->tail = node;
     return;
   }
-
-  // Traverse list to find tail
-  ListNode<T>* temp = this->head;
-  while(temp->next != nullptr) {
-    temp = temp->next;
-  }
   
-  // Set tail's next to new node
-  temp->next = node;
+  // Shift previous tail
+  this->tail->next = node;
+  this->tail = node;
 }
 
 template <typename T>
@@ -242,6 +241,11 @@ void LinkedList<T>::insert(int index, const T& value) {
   ListNode<T>* node = new ListNode(value);
   node->next = current->next;
   current->next = node;
+
+  // Set tail if inserted at end
+  if (node->next == nullptr) {
+    this->tail = node;
+  }
 }
 
 template <typename T>
@@ -280,6 +284,46 @@ void LinkedList<T>::remove_all(const T& value) {
 }
 
 template <typename T>
+void LinkedList<T>::remove_at(int index) {
+  // Check if index within lower bounds
+  if (index < 0) {
+    throw std::out_of_range("Index out of range");
+  }
+
+  // Check if list empty
+  if (this->head == nullptr) {
+    throw std::out_of_range("List is empty");
+  }
+
+  // Remove head if index 0
+  if (index == 0) {
+    pop_front();
+    return;
+  }
+
+  // Traverse list until desired index - 1 is reached
+  ListNode<T>* current = this->head;
+  for (int i = 1; i <= index; i++) {
+    if (current == nullptr) {
+      throw std::out_of_range("Index out of range");
+    }
+    if (i == index) {
+      // Remove node at index
+      ListNode<T>* temp = current->next;
+      current->next = temp->next;
+
+      // Update tail if needed
+      if (temp == this->tail) {
+        this->tail = current;
+      }
+      delete temp;
+      return;
+    }
+    current = current->next;
+  }
+}
+
+template <typename T>
 void LinkedList<T>::pop_front() {
   // Check if list empty
   if (this->head == nullptr) {
@@ -289,6 +333,12 @@ void LinkedList<T>::pop_front() {
   // Remove first node
   ListNode<T>* temp = this->head;
   this->head = this->head->next;
+  
+  // Update tail if list empty
+  if (this->head == nullptr) {
+    this->tail = nullptr;
+  }
+
   delete temp;
 }
 
@@ -296,25 +346,27 @@ template <typename T>
 void LinkedList<T>::pop_back() {
   // Check if list empty
   if (this->head == nullptr) {
-    return;
+    throw std::out_of_range("List is empty");
   }
 
   // Remove head and return if list is singleton
   if (this->head->next == nullptr) {
     delete this->head;
     this->head = nullptr;
+    this->tail = nullptr;
     return;
   }
   
   // Traverse list until reaching second to tail
-  ListNode<T>* temp = this->head;
-  while (temp->next->next != nullptr) {
-    temp = temp->next;
+  ListNode<T>* current = this->head;
+  while (current->next != this->tail) {
+    current = current->next;
   }
 
   // Remove tail
-  delete temp->next;
-  temp->next = nullptr;
+  delete this->tail;
+  this->tail = current;
+  this->tail->next = nullptr;
 }
 
 template <typename T>
@@ -329,6 +381,7 @@ void LinkedList<T>::clear() {
 
   // Reset head pointer
   this->head = nullptr;
+  this->tail = nullptr;
 }
 
 template <typename T>
