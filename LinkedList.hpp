@@ -1,8 +1,55 @@
-#include "LinkedList.h"
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
+
+// Struct defining a node in linked list
+template <typename T>
+struct ListNode {
+  T value;
+  ListNode* next;
+  
+  ListNode(T value) : value(value), next(nullptr) {}
+};
+
+// Class representing singly linked list
+template <typename T>
+class LinkedList {
+private:
+  ListNode<T>* head;                          // Pointer to first node in list 
+public:                                    
+  // Constructors and Destructor           
+  LinkedList<T>();                            // Default constructor
+  LinkedList<T>(const LinkedList<T> &other);     // Copy constructor
+  ~LinkedList<T>();                           // Destructor
+
+  // Accessors
+  T& value_at(int index);                 // Returns value stored at specific index
+  T& front();                             // Returns value at list head
+  T& back();                              // Returns value at list tail
+  T& operator[](int index);              // Overloaded subscript operator
+
+  int size() const;                        // Returns number of elements
+  bool empty() const;                      // Checks if list empty
+
+  // Mutators
+  void push_front(const T& value);              // Adds new element at head
+  void push_back(const T& value);               // Adds new element at tail
+  void insert(int index, const T& value);       // Adds new element at specified index
+  
+  void remove_all(const T& value);              // Removes all elements of value
+  void pop_front();                        // Removes head element
+  void pop_back();                         // Removes tail element
+  void clear();                            // Removes all elements
+
+  // Utility
+  int find(const T& value) const;               // Finds index of first occurance of value
+  void print_list();                       // Prints all elements
+};
+
 #include <stdexcept>
 
 // Return value at index
-int LinkedList::value_at(int index) {
+template <typename T>
+T& LinkedList<T>::value_at(int index) {
   // Check if index is within lower range
   if (index < 0) {
     throw std::out_of_range("Index out of range");
@@ -10,7 +57,7 @@ int LinkedList::value_at(int index) {
   
   // Traverse list until reaching index
   int i = 0;
-  ListNode* current = this->head;
+  ListNode<T>* current = this->head;
   while (current != nullptr) {
 
     // Return value if current node matches index
@@ -28,7 +75,8 @@ int LinkedList::value_at(int index) {
 }
 
 // Return value at front of list
-int LinkedList::front() {
+template <typename T>
+T& LinkedList<T>::front() {
   // Check if list is empty
   if (this->head == nullptr) {
     throw std::out_of_range("List is empty");
@@ -39,14 +87,15 @@ int LinkedList::front() {
 }
 
 // Return value at back of list
-int LinkedList::back() {
+template <typename T>
+T& LinkedList<T>::back() {
   // Check if list is empty
   if (this->head == nullptr) {
     throw std::out_of_range("List is empty");
   }
 
   // Traverse list until current node is tail
-  ListNode* current = this->head;
+  ListNode<T>* current = this->head;
   while (current->next != nullptr) {
     current = current->next;
   }
@@ -56,7 +105,8 @@ int LinkedList::back() {
 }
 
 // Overload subscript operator
-int& LinkedList::operator[](int index) {
+template <typename T>
+T& LinkedList<T>::operator[](int index) {
   // Check if index is within lower range
   if (index < 0) {
     throw std::out_of_range("Index out of range");
@@ -64,7 +114,7 @@ int& LinkedList::operator[](int index) {
   
   // Traverse list until current node matches index
   int i = 0;
-  ListNode* current = this->head;
+  ListNode<T>* current = this->head;
   while (current != nullptr) {
     // Return value if current node matches index 
     if (i == index) {
@@ -81,11 +131,12 @@ int& LinkedList::operator[](int index) {
 }
 
 // Return number of elements
-int LinkedList::size() const {
+template <typename T>
+int LinkedList<T>::size() const {
   
   // Traverse list until tail
   int i = 0;
-  ListNode* current = this->head;
+  ListNode<T>* current = this->head;
   while (current != nullptr) {
     current = current->next;
     i++;
@@ -95,14 +146,16 @@ int LinkedList::size() const {
   return i;
 }
 
-bool LinkedList::empty() const {
+template <typename T>
+bool LinkedList<T>::empty() const {
   return this->head == nullptr;
 }
 
 // Add new element to front of list
-void LinkedList::push_front(int value) {
+template <typename T>
+void LinkedList<T>::push_front(const T& value) {
   // Make new node with provided value 
-  ListNode* node = new ListNode(value);
+  ListNode<T>* node = new ListNode(value);
   
   // Give value to head if list empty
   if (this->head == nullptr) {
@@ -118,9 +171,10 @@ void LinkedList::push_front(int value) {
 }
 
 // Add new element to end of list
-void LinkedList::push_back(int value) {
+template <typename T>
+void LinkedList<T>::push_back(const T& value) {
   // Initialize ListNode
-  ListNode* node = new ListNode(value);
+  ListNode<T>* node = new ListNode(value);
 
   // Check if list empty
   if (this->head == nullptr) {
@@ -129,7 +183,7 @@ void LinkedList::push_back(int value) {
   }
 
   // Traverse list to find tail
-  ListNode* temp = this->head;
+  ListNode<T>* temp = this->head;
   while(temp->next != nullptr) {
     temp = temp->next;
   }
@@ -139,7 +193,8 @@ void LinkedList::push_back(int value) {
 }
 
 // Add new element at index
-void LinkedList::insert(int index, int value) {
+template <typename T>
+void LinkedList<T>::insert(int index, const T& value) {
   if (index < 0) {
     throw std::out_of_range("Index out of range");
   }
@@ -151,7 +206,7 @@ void LinkedList::insert(int index, int value) {
   }
 
   // Traverse list until desired index - 1
-  ListNode* current = this->head;
+  ListNode<T>* current = this->head;
   for (int i = 1; i < index; i++) {
     // Check if in bounds
     if (current == nullptr) {
@@ -163,13 +218,14 @@ void LinkedList::insert(int index, int value) {
   }
   
   // Insert node between current and current's next
-  ListNode* node = new ListNode(value);
+  ListNode<T>* node = new ListNode(value);
   node->next = current->next;
   current->next = node;
 }
 
 // Remove all element(s) of value from list
-void LinkedList::remove_all(int value) {
+template <typename T>
+void LinkedList<T>::remove_all(const T& value) {
   // Check if list empty
   if (this->head == nullptr) {
     return;
@@ -177,7 +233,7 @@ void LinkedList::remove_all(int value) {
 
   // Remove head node(s) of value
   while(this->head != nullptr && this->head->value == value) {
-    ListNode* temp = this->head;
+    ListNode<T>* temp = this->head;
     this->head = this->head->next;
     delete temp;
   }
@@ -188,11 +244,11 @@ void LinkedList::remove_all(int value) {
   }
   
   // Remove all remaining non-head nodes of value
-  ListNode* current = this->head;
+  ListNode<T>* current = this->head;
   while (current->next != nullptr) {
     // Remove current's next if matches value
     if (current->next->value == value) {
-      ListNode* temp = current->next;
+      ListNode<T>* temp = current->next;
       current->next = current->next->next;
       delete temp;
       
@@ -204,20 +260,22 @@ void LinkedList::remove_all(int value) {
 }
 
 // Remove element at front of list
-void LinkedList::pop_front() {
+template <typename T>
+void LinkedList<T>::pop_front() {
   // Check if list empty
   if (this->head == nullptr) {
     return;
   }
   
   // Remove first node
-  ListNode* temp = this->head;
+  ListNode<T>* temp = this->head;
   this->head = this->head->next;
   delete temp;
 }
 
 // Remove element at end of list
-void LinkedList::pop_back() {
+template <typename T>
+void LinkedList<T>::pop_back() {
   // Check if list empty
   if (this->head == nullptr) {
     return;
@@ -231,7 +289,7 @@ void LinkedList::pop_back() {
   }
   
   // Traverse list until reaching second to tail
-  ListNode* temp = this->head;
+  ListNode<T>* temp = this->head;
   while (temp->next->next != nullptr) {
     temp = temp->next;
   }
@@ -242,11 +300,12 @@ void LinkedList::pop_back() {
 }
 
 // Clear list
-void LinkedList::clear() {
+template <typename T>
+void LinkedList<T>::clear() {
   // Traverse list and delete  nodes
-  ListNode* current = this->head;
+  ListNode<T>* current = this->head;
   while (current != nullptr) {
-    ListNode* next = current->next;
+    ListNode<T>* next = current->next;
     delete current;
     current = next;
   }
@@ -256,9 +315,10 @@ void LinkedList::clear() {
 }
 
 // Find index of first occurance of value
-int LinkedList::find(int value) const {
+template <typename T>
+int LinkedList<T>::find(const T& value) const {
   // Traverse until desired value found
-  ListNode* current = this->head;
+  ListNode<T>* current = this->head;
   int i = 0;
   while (current != nullptr) {
     if (current->value == value) {
@@ -274,7 +334,8 @@ int LinkedList::find(int value) const {
 
 // Print list
 #include <iostream>
-void LinkedList::print_list() {
+template <typename T>
+void LinkedList<T>::print_list() {
   // Check if list empty
   if (this->head == nullptr) {
     std::cout << "Ø" << std::endl;
@@ -282,7 +343,7 @@ void LinkedList::print_list() {
   }
   
   // Traverse list and print each element
-  ListNode* current = this->head;
+  ListNode<T>* current = this->head;
   while (current != nullptr) {
     std::cout << current->value << " ";
     current = current->next;
@@ -292,21 +353,23 @@ void LinkedList::print_list() {
 }
 
 // Default Constructor
-LinkedList::LinkedList() {
+template <typename T>
+LinkedList<T>::LinkedList() {
   // Initialize head to nullptr
   this->head = nullptr;
 }
 
 // Copy Constructor
-LinkedList::LinkedList(const LinkedList& other) {
+template <typename T>
+LinkedList<T>::LinkedList(const LinkedList& other) {
   if (other.head == nullptr) {
     return;
   }
 
-  ListNode* current = new ListNode(other.head->value);
+  ListNode<T>* current = new ListNode(other.head->value);
   this->head = current;
 
-  ListNode* temp = other.head->next;
+  ListNode<T>* temp = other.head->next;
   while (temp != nullptr) {
     current->next = new ListNode(temp->value);
     current = current->next;
@@ -315,12 +378,15 @@ LinkedList::LinkedList(const LinkedList& other) {
 }
 
 // Destructor
-LinkedList::~LinkedList() {
+template <typename T>
+LinkedList<T>::~LinkedList() {
   // Traverse list and delete each node
-  ListNode* current = this->head;
+  ListNode<T>* current = this->head;
   while (current != nullptr) {
-    ListNode* next = current->next;
+    ListNode<T>* next = current->next;
     delete current;
     current = next;
   }
 }
+
+#endif
