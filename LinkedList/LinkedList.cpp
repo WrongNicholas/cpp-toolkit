@@ -153,7 +153,7 @@ void LinkedList::clear() {
 #include <iostream>
 void LinkedList::print_list() {
   if (this->head == nullptr) {
-    std::cout << "Empty!" << std::endl;
+    std::cout << "Ø" << std::endl;
     return;
   }
 
