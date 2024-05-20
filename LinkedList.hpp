@@ -26,6 +26,8 @@ template <typename T>
 class LinkedList {
 private:
   ListNode<T>* head;                          // Pointer to first node in list 
+
+  ListNode<T>* get_node_at(int index) const;
 public:                                    
   // Constructors and Destructor           
   LinkedList<T>();                            // Default constructor
@@ -91,29 +93,33 @@ LinkedList<T>::~LinkedList() {
 }
 
 template <typename T>
-T& LinkedList<T>::value_at(int index) {
-  // Check if index is within lower range
+ListNode<T>* LinkedList<T>::get_node_at(int index) const {
+  // Check if index is within lower bounds
   if (index < 0) {
     throw std::out_of_range("Index out of range");
   }
-  
+
   // Traverse list until reaching index
   int i = 0;
   ListNode<T>* current = this->head;
   while (current != nullptr) {
-
     // Return value if current node matches index
     if (i == index) {
-      return current->value;
+      return current;
     }
-    
-    // Move to next node and increment local index
+
+    // Move to net node and increment local index
     current = current->next;
     i++;
   }
-  
+
   // Throw exception if selected index out of range
   throw std::out_of_range("Index out of range");
+}
+
+template <typename T>
+T& LinkedList<T>::value_at(int index) {
+  return get_node_at(index)->value;
 }
 
 template <typename T>
@@ -146,27 +152,7 @@ T& LinkedList<T>::back() {
 
 template <typename T>
 T& LinkedList<T>::operator[](int index) {
-  // Check if index is within lower range
-  if (index < 0) {
-    throw std::out_of_range("Index out of range");
-  }
-  
-  // Traverse list until current node matches index
-  int i = 0;
-  ListNode<T>* current = this->head;
-  while (current != nullptr) {
-    // Return value if current node matches index 
-    if (i == index) {
-      return current->value;
-    }
-    
-    // Move to next node and increment local index
-    current = current->next;
-    i++;
-  }
-
-  // Throw exception if selected index out of range
-  throw std::out_of_range("Index out of range");
+  return get_node_at(index)->value;
 }
 
 template <typename T>
