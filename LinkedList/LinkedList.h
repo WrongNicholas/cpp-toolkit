@@ -18,6 +18,8 @@ public:
   int front();
   int back();
 
+  int& operator[](int index);
+
   // Mutators
   void push_front(int value);
   void push_back(int value);

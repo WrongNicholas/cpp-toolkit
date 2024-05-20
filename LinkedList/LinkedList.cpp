@@ -25,6 +25,15 @@ int LinkedList::back() {
   return current->value;
 }
 
+// Overload subscript operator
+int& LinkedList::operator[](int index) {
+  ListNode* node = this->head;
+  for (int i = 0; i < index; i++) {
+    node = node->next;
+  }
+  return node->value;
+}
+
 // Add new element to front of list
 void LinkedList::push_front(int index) {
   ListNode* node = new ListNode(index);
