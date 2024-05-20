@@ -137,10 +137,23 @@ void LinkedList::pop_back() {
   temp->next = nullptr;
 }
 
+// Clear list
+void LinkedList::clear() {
+  ListNode* current = this->head;
+  while (current != nullptr) {
+    ListNode* next = current->next;
+    delete current;
+    current = next;
+  }
+
+  this->head = nullptr;
+}
+
 // Print list
 #include <iostream>
 void LinkedList::print_list() {
   if (this->head == nullptr) {
+    std::cout << "Empty!" << std::endl;
     return;
   }
 
