@@ -80,6 +80,25 @@ int& LinkedList::operator[](int index) {
   throw std::out_of_range("Index out of range");
 }
 
+// Return number of elements
+int LinkedList::size() const {
+  
+  // Traverse list until tail
+  int i = 0;
+  ListNode* current = this->head;
+  while (current != nullptr) {
+    current = current->next;
+    i++;
+  }
+
+  // Return size
+  return i;
+}
+
+bool LinkedList::empty() const {
+  return this->head == nullptr;
+}
+
 // Add new element to front of list
 void LinkedList::push_front(int value) {
   // Make new node with provided value 
@@ -234,6 +253,23 @@ void LinkedList::clear() {
 
   // Reset head pointer
   this->head = nullptr;
+}
+
+// Find index of first occurance of value
+int LinkedList::find(int value) const {
+  // Traverse until desired value found
+  ListNode* current = this->head;
+  int i = 0;
+  while (current != nullptr) {
+    if (current->value == value) {
+      return i;
+    }
+    current = current->next;
+    i++;
+  }
+
+  // Throw error if value not found
+  throw std::runtime_error("Value not found");
 }
 
 // Print list

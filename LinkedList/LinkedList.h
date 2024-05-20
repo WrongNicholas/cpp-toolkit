@@ -25,16 +25,21 @@ public:
   int back();                              // Returns value at list tail
   int& operator[](int index);              // Overloaded subscript operator
 
- // Mutators
+  int size() const;                        // Returns number of elements
+  bool empty() const;                      // Checks if list empty
+
+  // Mutators
   void push_front(int value);              // Adds new element at head
   void push_back(int value);               // Adds new element at tail
   void insert(int index, int value);       // Adds new element at specified index
+  
   void remove_all(int value);              // Removes all elements of value
   void pop_front();                        // Removes head element
   void pop_back();                         // Removes tail element
   void clear();                            // Removes all elements
 
   // Utility
+  int find(int value) const;               // Finds index of first occurance of value
   void print_list();                       // Prints all elements
 };
 
