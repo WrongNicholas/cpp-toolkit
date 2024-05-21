@@ -154,7 +154,7 @@ const T& LinkedList<T>::front() const {
 
 template <typename T>
 T& LinkedList<T>::back() {
-  if (this->head == nullptr) {
+  if (this->tail == nullptr) {
     throw std::out_of_range("List is empty");
   }
 
