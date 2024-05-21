@@ -8,7 +8,7 @@ struct TreeNode {
   TreeNode<T>* left;
   TreeNode<T>* right;
    
-  TreeNode(T value) : value(value), left(nullptr), right(nullptr) {}
+  TreeNode(const T& value) : value(value), left(nullptr), right(nullptr) {}
 };
 #include <iostream>
 template <typename T>
@@ -17,7 +17,7 @@ private:
   TreeNode<T>* root;
 public:
   // Constructor and Destructor
-  BST();
+  BST() : root(nullptr) {}
   ~BST();
   
   // Mutators
@@ -29,48 +29,41 @@ public:
 };
 
 template <typename T>
-BST<T>::BST() {
-
-}
-
-template <typename T>
 BST<T>::~BST() {
 
 }
 
 template <typename T>
 void BST<T>::insert(const T& value) {
-  TreeNode<T>* node = new TreeNode(value);
-
+  TreeNode<T>* node = new TreeNode<T>(value);
   if (root == nullptr) {
     root = node;
     return;
   }
 
   TreeNode<T>* current = root;
+  TreeNode<T>* parent = nullptr;
   while (current != nullptr) {
-    if (node->value < current->value) {
+    parent = current;
+    if (value < current->value) {
       current = current->left;
     }
-    else if (node->value > current->value) {
-      current = current->right;
-    }
     else {
-      return;
+      current = current->right;
     }
   }
 
-  current = node;
+  if (value < parent->value) {
+    parent->left = node;
+  }
+  else {
+    parent->right = node;
+  }
 }
 
 template <typename T>
 bool BST<T>::search(const T& value) {
-  if (root != nullptr) {
-    return false;
-  }
-
   TreeNode<T>* current = root;
-
   while (current != nullptr) {
     if (value < current->value) {
       current = current->left;
