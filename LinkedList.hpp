@@ -184,7 +184,7 @@ bool LinkedList<T>::empty() const {
 
 template <typename T>
 void LinkedList<T>::push_front(const T& value) {
-  ListNode<T>* node = new ListNode(value);
+  ListNode<T>* node = new ListNode<T>(value);
   
   if (this->head == nullptr) {
     this->head = node;
@@ -198,7 +198,7 @@ void LinkedList<T>::push_front(const T& value) {
 
 template <typename T>
 void LinkedList<T>::push_back(const T& value) {
-  ListNode<T>* node = new ListNode(value);
+  ListNode<T>* node = new ListNode<T>(value);
   
   if (this->head == nullptr) {
     this->head = node;
