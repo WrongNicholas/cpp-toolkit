@@ -6,14 +6,14 @@
 
 // Struct defining a node in the binary search tree
 template <typename Key, typename Value>
-struct TreeNode {
-  Key key;
-  Value value;                     // Value stored in the node
-  TreeNode<Key, Value>* left;      // Pointer to the left child node
-  TreeNode<Key, Value>* right;     // Pointer to the right child node
+struct Node {
+  Key key;                     // Key stored in the node
+  Value value;                 // Value stored in the node
+  Node<Key, Value>* left;      // Pointer to the left child node
+  Node<Key, Value>* right;     // Pointer to the right child node
   
   // Constructor to initialize the node with a value
-  TreeNode(const Key& key, const Value& value) : key(key), value(value), left(nullptr), right(nullptr) {}
+  Node(const Key& key, const Value& value) : key(key), value(value), left(nullptr), right(nullptr) {}
 };
 
 // Class representing a binary search tree
@@ -21,16 +21,16 @@ template <typename Key, typename Value>
 class BST {
 private:
   bool allowDuplicates;
-  TreeNode<Key, Value>* root;          // Pointer to the root node of the tree
+  Node<Key, Value>* root;          // Pointer to the root node of the tree
 
   // Private Helper Functions
-  TreeNode<Key, Value>* get_node(const Key& key);                                 // Finds a node with the given key
-  const TreeNode<Key, Value>* get_node(const Key& key) const;                     // Finds a node with the given key
-  TreeNode<Key, Value>* get_local_min(TreeNode<Key, Value>* node) const;          // Finds the node with the minimum key in a subtree
-  TreeNode<Key, Value>* get_local_max(TreeNode<Key, Value>* node) const;          // Finds the node with the maximum key in a subtree
-  void in_order_traversal(TreeNode<Key, Value>* node);                            // Performs in-order traversal starting from the given node
-  void remove(TreeNode<Key, Value>*& node, const Key& key);                       // Recursively deletes all nodes with the given tree
-  void clear(TreeNode<Key, Value>* node);                                         // Recursively deletes all nodes in the tree
+  Node<Key, Value>* get_node(const Key& key);                                     // Finds a node with the given key
+  const Node<Key, Value>* get_node(const Key& key) const;                         // Finds a node with the given key
+  Node<Key, Value>* get_local_min(Node<Key, Value>* node) const;                  // Finds the node with the minimum key in a subtree
+  Node<Key, Value>* get_local_max(Node<Key, Value>* node) const;                  // Finds the node with the maximum key in a subtree
+  void in_order_traversal(Node<Key, Value>* node);                                // Performs in-order traversal starting from the given node
+  void remove(Node<Key, Value>*& node, const Key& key);                           // Recursively deletes all nodes with the given tree
+  void clear(Node<Key, Value>* node);                                             // Recursively deletes all nodes in the tree
 
 public:
   // Constructors and Destructor
@@ -57,9 +57,8 @@ public:
 // Function definitions
 
 template <typename Key, typename Value>
-TreeNode<Key, Value>* BST<Key, Value>::get_node(const Key& key)
-{
-  TreeNode<Key, Value>* current = root;
+Node<Key, Value>* BST<Key, Value>::get_node(const Key& key) {
+  Node<Key, Value>* current = root;
   while (current != nullptr) {
     if (key < current->key) {
       current = current->left;
@@ -75,9 +74,8 @@ TreeNode<Key, Value>* BST<Key, Value>::get_node(const Key& key)
 }
 
 template <typename Key, typename Value>
-const TreeNode<Key, Value>* BST<Key, Value>::get_node(const Key& key) const
-{
-  TreeNode<Key, Value>* current = root;
+const Node<Key, Value>* BST<Key, Value>::get_node(const Key& key) const {
+  Node<Key, Value>* current = root;
   while (current != nullptr) {
     if (key < current->key) {
       current = current->left;
@@ -93,7 +91,7 @@ const TreeNode<Key, Value>* BST<Key, Value>::get_node(const Key& key) const
 }
 
 template <typename Key, typename Value>
-TreeNode<Key, Value>* BST<Key, Value>::get_local_min(TreeNode<Key, Value>* node) const {
+Node<Key, Value>* BST<Key, Value>::get_local_min(Node<Key, Value>* node) const {
   while (node->left != nullptr) {
     node = node->left;
   }
@@ -101,7 +99,7 @@ TreeNode<Key, Value>* BST<Key, Value>::get_local_min(TreeNode<Key, Value>* node)
 }
 
 template <typename Key, typename Value>
-TreeNode<Key, Value>* BST<Key, Value>::get_local_max(TreeNode<Key, Value>* node) const {
+Node<Key, Value>* BST<Key, Value>::get_local_max(Node<Key, Value>* node) const {
   while (node->right != nullptr) {
     node = node->right;
   }
@@ -109,7 +107,7 @@ TreeNode<Key, Value>* BST<Key, Value>::get_local_max(TreeNode<Key, Value>* node)
 }
 
 template <typename Key, typename Value>
-void BST<Key, Value>::in_order_traversal(TreeNode<Key, Value>* node) {
+void BST<Key, Value>::in_order_traversal(Node<Key, Value>* node) {
   if (node == nullptr)  return;
 
   in_order_traversal(node->left);
@@ -118,7 +116,7 @@ void BST<Key, Value>::in_order_traversal(TreeNode<Key, Value>* node) {
 }
 
 template <typename Key, typename Value>
-void BST<Key, Value>::remove(TreeNode<Key, Value>*& node, const Key& key) {
+void BST<Key, Value>::remove(Node<Key, Value>*& node, const Key& key) {
   if (node == nullptr) return;
   
   if (key < node->key) {
@@ -139,15 +137,15 @@ void BST<Key, Value>::remove(TreeNode<Key, Value>*& node, const Key& key) {
       remove(node->right, key);
     }
 
-    TreeNode<Key, Value>* temp = node;
+    Node<Key, Value>* temp = node;
     node = node->right;
     delete temp;
   } else if (node->right == nullptr) {
-    TreeNode<Key, Value>* temp = node;
+    Node<Key, Value>* temp = node;
     node = node->left;
     delete temp;
   } else {
-    TreeNode<Key, Value>* temp = get_local_min(node->right);
+    Node<Key, Value>* temp = get_local_min(node->right);
     if (allowDuplicates) {
       remove(node->right, key);
     }
@@ -159,7 +157,7 @@ void BST<Key, Value>::remove(TreeNode<Key, Value>*& node, const Key& key) {
 }
 
 template <typename Key, typename Value>
-void BST<Key, Value>::clear(TreeNode<Key, Value>* node) {
+void BST<Key, Value>::clear(Node<Key, Value>* node) {
   if (node == nullptr) return;
   clear(node->left);
   clear(node->right);
@@ -198,11 +196,11 @@ const Value& BST<Key, Value>::get_root() const {
 
 template <typename Key, typename Value>
 void BST<Key, Value>::insert(const Key& key, const Value& value) {
-  TreeNode<Key, Value>* node = new TreeNode<Key, Value>(key, value);
+  Node<Key, Value>* node = new Node<Key, Value>(key, value);
   if (root == nullptr) { root = node; return; }
 
-  TreeNode<Key, Value>* current = root;
-  TreeNode<Key, Value>* parent = nullptr;
+  Node<Key, Value>* current = root;
+  Node<Key, Value>* parent = nullptr;
   while (current != nullptr) {
     parent = current;
     if (key < current->key) {
