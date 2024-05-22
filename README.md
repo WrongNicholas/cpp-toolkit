@@ -3,4 +3,8 @@
 This repository is my adventure into creating various data structures and algorithms in C++.
 
 ## Data Structures
-- LinkedList
+### Collections
+- Linked List
+- Stack
+### Trees
+- Binary Search Tree
