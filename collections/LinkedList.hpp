@@ -54,7 +54,7 @@ public:
   // Utility
   int find(const T& value) const;                           // Finds the index of the first occurance of a value
   bool contains(const T& value) const;                      // Checks if the list contains a specific value
-  void print_list();                                        // Prints all elements in the list
+  void print();                                        // Prints all elements in the list
 
   // Iterator
   class Iterator {
@@ -362,7 +362,7 @@ bool LinkedList<T>::contains(const T& value) const {
 }
 
 template <typename T>
-void LinkedList<T>::print_list() {
+void LinkedList<T>::print() {
   if (this->head == nullptr) {
     std::cout << "Ø" << std::endl;
     return;
