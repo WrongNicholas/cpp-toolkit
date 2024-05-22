@@ -4,46 +4,52 @@
 
 #include <iostream>
 
+// Struct defining a node in the binary search tree
 template <typename T>
 struct TreeNode {
-  T value;
-  TreeNode<T>* left;
-  TreeNode<T>* right;
-   
+  T value;                    // Value stored in the node
+  TreeNode<T>* left;          // Pointer to the left child node
+  TreeNode<T>* right;         // Pointer to the right child node
+  
+  // Constructor to initialize the node with a value
   TreeNode(const T& value) : value(value), left(nullptr), right(nullptr) {}
 };
 
+// Class representing a binary search tree
 template <typename T>
 class BST {
 private:
-  TreeNode<T>* root;
+  TreeNode<T>* root;          // Pointer to the root node of the tree
+
   // Private Helper Functions
-  TreeNode<T>* get_node(const T& value);
-  TreeNode<T>* get_local_min(TreeNode<T>* node) const;
-  TreeNode<T>* get_local_max(TreeNode<T>* node) const;
-  void in_order_traversal(TreeNode<T>* node);
-  void remove(TreeNode<T>*& node, const T& value);
-  void clear(TreeNode<T>* node);
+  TreeNode<T>* get_node(const T& value);                  // Finds a node with the given value
+  TreeNode<T>* get_local_min(TreeNode<T>* node) const;    // Finds the node with the minimum value in a subtree
+  TreeNode<T>* get_local_max(TreeNode<T>* node) const;    // Finds the node with the maximum value in a subtree
+  void in_order_traversal(TreeNode<T>* node);             // Performs in-order traversal starting from the given node
+  void remove(TreeNode<T>*& node, const T& value);        // Recursively deletes all nodes with the given value
+  void clear(TreeNode<T>* node);                          // Recursively deletes all nodes in the tree
 
 public:
   // Constructors and Destructor
-  BST() : root(nullptr) {}
-  ~BST();
+  BST() : root(nullptr) {}                                // Default constructor
+  ~BST();                                                 // Destructor
   
   // Accessors
-  const bool search(const T& value) const;
-  const T& get_min() const;
-  const T& get_max() const;
-  const T& get_root() const;
+  const bool search(const T& value) const;                // Searches for a value in the tree
+  const T& get_min() const;                               // Returns the minimum value in the tree
+  const T& get_max() const;                               // Returns the maximum value in the tree
+  const T& get_root() const;                              // Returns the value of the root node
   
   // Mutators
-  void insert(const T& value);
-  void remove(const T& value);
-  void clear();
+  void insert(const T& value);                            // Inserts a new value into the tree
+  void remove(const T& value);                            // Removes a value from the tree
+  void clear();                                           // Clears the tree
   
   // Utility
-  void print();
+  void print();                                           // Prints all values in the tree (in-order)
 };
+
+// Function definitions
 
 template <typename T>
 TreeNode<T>* BST<T>::get_node(const T& value)
