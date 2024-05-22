@@ -20,36 +20,38 @@ struct TreeNode {
 template <typename Key, typename Value>
 class BST {
 private:
+  bool allowDuplicates;
   TreeNode<Key, Value>* root;          // Pointer to the root node of the tree
 
   // Private Helper Functions
-  TreeNode<Key, Value>* get_node(const Key& key);                         // Finds a node with the given key
-  const TreeNode<Key, Value>* get_node(const Key& key) const;             // Finds a node with the given key
-  TreeNode<Key, Value>* get_local_min(TreeNode<Key, Value>* node) const;  // Finds the node with the minimum key in a subtree
-  TreeNode<Key, Value>* get_local_max(TreeNode<Key, Value>* node) const;  // Finds the node with the maximum key in a subtree
-  void in_order_traversal(TreeNode<Key, Value>* node);                    // Performs in-order traversal starting from the given node
-  void remove(TreeNode<Key, Value>*& node, const Key& key);               // Recursively deletes all nodes with the given tree
-  void clear(TreeNode<Key, Value>* node);                                 // Recursively deletes all nodes in the tree
+  TreeNode<Key, Value>* get_node(const Key& key);                                 // Finds a node with the given key
+  const TreeNode<Key, Value>* get_node(const Key& key) const;                     // Finds a node with the given key
+  TreeNode<Key, Value>* get_local_min(TreeNode<Key, Value>* node) const;          // Finds the node with the minimum key in a subtree
+  TreeNode<Key, Value>* get_local_max(TreeNode<Key, Value>* node) const;          // Finds the node with the maximum key in a subtree
+  void in_order_traversal(TreeNode<Key, Value>* node);                            // Performs in-order traversal starting from the given node
+  void remove(TreeNode<Key, Value>*& node, const Key& key);                       // Recursively deletes all nodes with the given tree
+  void clear(TreeNode<Key, Value>* node);                                         // Recursively deletes all nodes in the tree
 
 public:
   // Constructors and Destructor
-  BST() : root(nullptr) {}                                                // Default constructor
-  ~BST();                                                                 // Destructor
+  BST() : root(nullptr), allowDuplicates(false) {}                                // Default constructor
+  BST(bool allowDuplicates) : root(nullptr), allowDuplicates(allowDuplicates) {}  // Constructor for changing default allowDuplicates
+  ~BST();                                                                         // Destructor
   
   // Accessors
-  Value& search(const Key& key);                                          // Returns the value associated with the given key from the tree
-  const Value& search(const Key& key) const;                              // Returns the value associated with the given key from the tree (const)
-  const Value& get_min() const;                                           // Returns the minimum value in the tree
-  const Value& get_max() const;                                           // Returns the maximum value in the tree
-  const Value& get_root() const;                                          // Returns the value of the root node
+  Value& search(const Key& key);                                                  // Returns the value associated with the given key from the tree
+  const Value& search(const Key& key) const;                                      // Returns the value associated with the given key from the tree (const)
+  const Value& get_min() const;                                                   // Returns the minimum value in the tree
+  const Value& get_max() const;                                                   // Returns the maximum value in the tree
+  const Value& get_root() const;                                                  // Returns the value of the root node
   
   // Mutators
-  void insert(const Key& key, const Value& value);                        // Inserts a new key-value pair into the tree
-  void remove(const Key& key);                                            // Removes a key-value pair from the tree
-  void clear();                                                           // Clears the tree
+  void insert(const Key& key, const Value& value);                                // Inserts a new key-value pair into the tree
+  void remove(const Key& key);                                                    // Removes a key-value pair from the tree
+  void clear();                                                                   // Clears the tree
   
   // Utility
-  void print();                                                           // Prints all key-value pairs in the tree (in-order)
+  void print();                                                                   // Prints all key-value pairs in the tree (in-order)
 };
 
 // Function definitions
@@ -133,6 +135,10 @@ void BST<Key, Value>::remove(TreeNode<Key, Value>*& node, const Key& key) {
     delete node;
     node = nullptr;
   } else if (node->left == nullptr) {
+    if (allowDuplicates) {
+      remove(node->right, key);
+    }
+
     TreeNode<Key, Value>* temp = node;
     node = node->right;
     delete temp;
@@ -142,12 +148,15 @@ void BST<Key, Value>::remove(TreeNode<Key, Value>*& node, const Key& key) {
     delete temp;
   } else {
     TreeNode<Key, Value>* temp = get_local_min(node->right);
+    if (allowDuplicates) {
+      remove(node->right, key);
+    }
+    
     node->key = temp->key;
     node->value = temp->value;
-    remove(node->right, temp->key);
+    remove(node->right, key);
   }
 }
-
 
 template <typename Key, typename Value>
 void BST<Key, Value>::clear(TreeNode<Key, Value>* node) {
