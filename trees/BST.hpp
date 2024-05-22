@@ -24,7 +24,7 @@ private:
 
   // Private Helper Functions
   TreeNode<Key, Value>* get_node(const Key& key);                         // Finds a node with the given key
-  const TreeNode<Key, Value>* get_node(const Key& key) const;                   // Finds a node with the given key
+  const TreeNode<Key, Value>* get_node(const Key& key) const;             // Finds a node with the given key
   TreeNode<Key, Value>* get_local_min(TreeNode<Key, Value>* node) const;  // Finds the node with the minimum key in a subtree
   TreeNode<Key, Value>* get_local_max(TreeNode<Key, Value>* node) const;  // Finds the node with the maximum key in a subtree
   void in_order_traversal(TreeNode<Key, Value>* node);                    // Performs in-order traversal starting from the given node
@@ -38,7 +38,7 @@ public:
   
   // Accessors
   Value& search(const Key& key);                                          // Returns the value associated with the given key from the tree
-  const Value& search(const Key& key) const;                                    // Returns the value associated with the given key from the tree (const)
+  const Value& search(const Key& key) const;                              // Returns the value associated with the given key from the tree (const)
   const Value& get_min() const;                                           // Returns the minimum value in the tree
   const Value& get_max() const;                                           // Returns the maximum value in the tree
   const Value& get_root() const;                                          // Returns the value of the root node
