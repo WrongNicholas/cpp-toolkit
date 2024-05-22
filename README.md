@@ -3,7 +3,7 @@
 This repository is my adventure into creating various data structures and algorithms in C++.
 
 ## Data Structures
-### Collections
+### Linear
 - Linked List
 - Stack
 ### Trees
