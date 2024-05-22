@@ -20,26 +20,24 @@ struct BSTNode {
 template <typename Key, typename Value>
 class BST {
 private:
-  bool allowDuplicates;
   BSTNode<Key, Value>* root;          // Pointer to the root node of the tree
 
   // Private Helper Functions
-  BSTNode<Key, Value>* get_node(const Key& key);                                     // Finds a node with the given key
-  const BSTNode<Key, Value>* get_node(const Key& key) const;                         // Finds a node with the given key
-  BSTNode<Key, Value>* get_local_min(BSTNode<Key, Value>* node) const;                  // Finds the node with the minimum key in a subtree
-  BSTNode<Key, Value>* get_local_max(BSTNode<Key, Value>* node) const;                  // Finds the node with the maximum key in a subtree
-  void remove(BSTNode<Key, Value>*& node, const Key& key);                           // Recursively deletes all nodes with the given tree
-  void clear(BSTNode<Key, Value>* node);                                             // Recursively deletes all nodes in the tree
+  BSTNode<Key, Value>* get_node(const Key& key);                                  // Finds a node with the given key
+  const BSTNode<Key, Value>* get_node(const Key& key) const;                      // Finds a node with the given key
+  BSTNode<Key, Value>* get_local_min(BSTNode<Key, Value>* node) const;            // Finds the node with the minimum key in a subtree
+  BSTNode<Key, Value>* get_local_max(BSTNode<Key, Value>* node) const;            // Finds the node with the maximum key in a subtree
+  void remove(BSTNode<Key, Value>*& node, const Key& key);                        // Recursively deletes all nodes with the given tree
+  void clear(BSTNode<Key, Value>* node);                                          // Recursively deletes all nodes in the tree
 
-  void print_node(BSTNode<Key, Value>* node);                                        // Prints the given node
-  void in_order(BSTNode<Key, Value>* node);                                          // Performs in-order traversal starting from the given node
-  void pre_order(BSTNode<Key, Value>* node);                                         // Performs pre-order traversal starting from the given node
-  void post_order(BSTNode<Key, Value>* node);                                        // Performs post-order traversal starting from the given node
+  void print_node(BSTNode<Key, Value>* node);                                     // Prints the given node
+  void in_order(BSTNode<Key, Value>* node);                                       // Performs in-order traversal starting from the given node
+  void pre_order(BSTNode<Key, Value>* node);                                      // Performs pre-order traversal starting from the given node
+  void post_order(BSTNode<Key, Value>* node);                                     // Performs post-order traversal starting from the given node
 
 public:
   // Constructors and Destructor
-  BST() : root(nullptr), allowDuplicates(false) {}                                // Default constructor
-  BST(bool allowDuplicates) : root(nullptr), allowDuplicates(allowDuplicates) {}  // Constructor for changing default allowDuplicates
+  BST() : root(nullptr) {}                                                        // Default constructor
   ~BST();                                                                         // Destructor
   
   // Accessors
@@ -56,8 +54,8 @@ public:
   
   // Utility
   void in_order();                                                                // Prints all key-value pairs in the tree (in-order)
-  void pre_order();
-  void post_order();
+  void pre_order();                                                               // Prints all key-value pairs in the tree (pre-order)
+  void post_order();                                                              // Prints all key-value pairs in the tree (post-order)
 };
 
 // Function definitions
@@ -162,9 +160,6 @@ void BST<Key, Value>::remove(BSTNode<Key, Value>*& node, const Key& key) {
     delete node;
     node = nullptr;
   } else if (node->left == nullptr) {
-    if (allowDuplicates) {
-      remove(node->right, key);
-    }
 
     BSTNode<Key, Value>* temp = node;
     node = node->right;
@@ -175,9 +170,6 @@ void BST<Key, Value>::remove(BSTNode<Key, Value>*& node, const Key& key) {
     delete temp;
   } else {
     BSTNode<Key, Value>* temp = get_local_min(node->right);
-    if (allowDuplicates) {
-      remove(node->right, key);
-    }
     
     node->key = temp->key;
     node->value = temp->value;
@@ -235,8 +227,10 @@ void BST<Key, Value>::insert(const Key& key, const Value& value) {
     if (key < current->key) {
       current = current->left;
     }
-    else {
+    else if (key > current->key) {
       current = current->right;
+    } else {
+      return;
     }
   }
 
