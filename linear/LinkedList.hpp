@@ -7,23 +7,23 @@
 
 // Struct defining a node in linked list
 template <typename T>
-struct ListNode {
-  T value;          // Value stored in the node
-  ListNode* next;   // Pointer to the next node in the list
+struct Node {
+  T value;      // Value stored in the node
+  Node* next;   // Pointer to the next node in the list
   
   // Constructor to initialize the node with a value
-  ListNode(T value) : value(value), next(nullptr) {}
+  Node(T value) : value(value), next(nullptr) {}
 };
 
 // Class representing singly linked list
 template <typename T>
 class LinkedList {
 private:
-  ListNode<T>* head;    // Pointer to the first node in the list
-  ListNode<T>* tail;    // Pointer to the last node in the list
+  Node<T>* head;    // Pointer to the first node in the list
+  Node<T>* tail;    // Pointer to the last node in the list
 
   // Private helper function to get node at a specific index
-  ListNode<T>* get_node_at(int index) const;
+  Node<T>* get_node_at(int index) const;
 
 public:                                    
   // Constructors and Destructor           
@@ -54,21 +54,21 @@ public:
   // Utility
   int find(const T& value) const;                           // Finds the index of the first occurance of a value
   bool contains(const T& value) const;                      // Checks if the list contains a specific value
-  void print();                                        // Prints all elements in the list
+  void print();                                             // Prints all elements in the list
 
   // Iterator
   class Iterator {
   private:
-    ListNode<T>* current;   // Pointer to the current node in the iteration
+    Node<T>* current;   // Pointer to the current node in the iteration
   public:
     // Constructor
-    Iterator(ListNode<T>* node) : current(node) { }
+    Iterator(Node<T>* node) : current(node) { }
 
     // Dereference operator
     T& operator*() const { return current->value; }
 
     // Get the current node
-    ListNode<T>* get_node() { return current; }
+    Node<T>* get_node() { return current; }
 
     // Increment operator
     Iterator& operator++() { current = current->next; return *this; }
@@ -85,7 +85,7 @@ public:
 };
 
 template <typename T>
-ListNode<T>* LinkedList<T>::get_node_at(int index) const {
+Node<T>* LinkedList<T>::get_node_at(int index) const {
   if (index < 0) {
     throw std::out_of_range("Index out of range");
   }
@@ -106,12 +106,12 @@ LinkedList<T>::LinkedList(const LinkedList& other) : head(nullptr), tail(nullptr
     return;
   }
   
-  this->head = new ListNode<T>(other.head->value);
-  ListNode<T>* current = this->head;
-  ListNode<T>* temp = other.head->next;
+  this->head = new Node<T>(other.head->value);
+  Node<T>* current = this->head;
+  Node<T>* temp = other.head->next;
 
   while (temp != nullptr) {
-    current->next = new ListNode<T>(temp->value);
+    current->next = new Node<T>(temp->value);
     current = current->next;
     temp = temp->next;
   }
@@ -184,7 +184,7 @@ bool LinkedList<T>::empty() const {
 
 template <typename T>
 void LinkedList<T>::push_front(const T& value) {
-  ListNode<T>* node = new ListNode<T>(value);
+  Node<T>* node = new Node<T>(value);
   
   if (this->head == nullptr) {
     this->head = node;
@@ -198,7 +198,7 @@ void LinkedList<T>::push_front(const T& value) {
 
 template <typename T>
 void LinkedList<T>::push_back(const T& value) {
-  ListNode<T>* node = new ListNode<T>(value);
+  Node<T>* node = new Node<T>(value);
   
   if (this->head == nullptr) {
     this->head = node;
@@ -221,9 +221,9 @@ void LinkedList<T>::insert(int index, const T& value) {
     return;
   }
 
-  ListNode<T>* current = get_node_at(index - 1);
+  Node<T>* current = get_node_at(index - 1);
   
-  ListNode<T>* node = new ListNode<T>(value);
+  Node<T>* node = new Node<T>(value);
 
   node->next = current->next;
   current->next = node;
@@ -235,8 +235,8 @@ void LinkedList<T>::insert(int index, const T& value) {
 
 template <typename T>
 void LinkedList<T>::remove_all(const T& value) {
-  ListNode<T>* current = this->head;
-  ListNode<T>* previous = nullptr;
+  Node<T>* current = this->head;
+  Node<T>* previous = nullptr;
 
   while (current != nullptr) {
     if (current->value == value) {
@@ -251,7 +251,7 @@ void LinkedList<T>::remove_all(const T& value) {
       if (previous != nullptr) {
         previous->next = current->next;
       } 
-      ListNode<T>* temp = current;
+      Node<T>* temp = current;
       current = current->next;
       delete temp;
     }
@@ -273,9 +273,9 @@ void LinkedList<T>::remove_at(int index) {
     return;
   }
 
-  ListNode<T>* previous = get_node_at(index - 1);
+  Node<T>* previous = get_node_at(index - 1);
 
-  ListNode<T>* temp = previous->next;
+  Node<T>* temp = previous->next;
   previous->next = temp->next;
 
   if (temp == tail) {
@@ -291,7 +291,7 @@ void LinkedList<T>::pop_front() {
     return;
   }
   
-  ListNode<T>* temp = this->head;
+  Node<T>* temp = this->head;
   this->head = this->head->next;
   
   if (this->head == nullptr) {
@@ -314,7 +314,7 @@ void LinkedList<T>::pop_back() {
     return;
   }
   
-  ListNode<T>* current = this->head;
+  Node<T>* current = this->head;
   while (current->next != this->tail) {
     current = current->next;
   }
@@ -326,9 +326,9 @@ void LinkedList<T>::pop_back() {
 
 template <typename T>
 void LinkedList<T>::clear() {
-  ListNode<T>* current = this->head;
+  Node<T>* current = this->head;
   while (current != nullptr) {
-    ListNode<T>* next = current->next;
+    Node<T>* next = current->next;
     delete current;
     current = next;
   }
