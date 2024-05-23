@@ -33,6 +33,9 @@ private:
   Node<Key, Value>* rotate_right(Node<Key, Value>* y);
   Node<Key, Value>* insert(Node<Key, Value>* node, const Key& key, const Value& value); 
 
+  Node<Key, Value>* remove(Node<Key, Value>* node, const Key& key);
+  Node<Key, Value>* get_local_min(Node<Key, Value>* node);
+
   // Utility
   void print_node(Node<Key, Value>* node);
   void in_order(Node<Key, Value>* node);
@@ -47,7 +50,8 @@ public:
 
   // Mutators
   void insert(const Key& key, const Value& value);
-  
+  void remove(const Key& key);
+
   // Utility
   void in_order();
   void pre_order();
@@ -168,6 +172,78 @@ Node<Key, Value>* AVLTree<Key, Value>::insert(Node<Key, Value>* node, const Key&
 }
 
 template <typename Key, typename Value>
+Node<Key, Value>* AVLTree<Key, Value>::remove(Node<Key, Value>* node, const Key& key) {
+  if (node == nullptr) return node;
+
+  if (key < node->key) {
+    node->left = remove(node->left, key);
+  } else if (key > node->key) {
+    node->right = remove(node->right, key);
+  }
+  else {
+    if (node->left == nullptr && node->right == nullptr) {
+      delete node;
+      node = nullptr;
+
+    } else if (node->left == nullptr) {
+      Node<Key, Value>* temp = node;
+      node = node->right;
+      delete temp;
+    
+    } else if (node->right == nullptr) {
+      Node<Key, Value>* temp = node;
+      node = node->left;
+      delete temp;
+
+    }else {
+      Node<Key, Value>* temp = get_local_min(node->right);
+      node->key = temp->key;
+      node->value = temp->value;
+      node->right = remove(node->right, temp->key);
+    }
+  }
+
+  if (node == nullptr) return node;
+
+  update_height(node);
+
+  int balance = get_balance(node);
+
+  // right
+  if (balance > 1 && get_balance(node->left) >= 0) {
+    return rotate_right(node);
+  }
+  
+  // left
+  if (balance < -1 && get_balance(node->right) >= 0) {
+    return rotate_left(node);
+  }
+
+  // left-right
+  if (balance > 1 && get_balance(node->left) < 0) {
+    node->left = rotate_left(node->left);
+    return rotate_right(node);
+  }
+
+  // right-left
+  if (balance < -1 && get_balance(node->right) > 0) {
+    node->right = rotate_right(node->right);
+    return rotate_left(node);
+  }
+
+  return node;
+}
+
+template <typename Key, typename Value>
+Node<Key, Value>* AVLTree<Key, Value>::get_local_min(Node<Key, Value>* node) {
+  Node<Key, Value>* current = node;
+  while (current->left != nullptr) {
+    current = current->left;
+  }
+  return current;
+}
+
+template <typename Key, typename Value>
 void AVLTree<Key, Value>::print_node(Node<Key, Value>* node) {
   std::cout << "(" << node->key << "," << node->value << "), ";
 }
@@ -212,6 +288,11 @@ Value& AVLTree<Key, Value>::search(const Key& key) const {
 template <typename Key, typename Value>
 void AVLTree<Key, Value>::insert(const Key& key, const Value& value) {
   root = insert(root, key, value);
+}
+
+template <typename Key, typename Value>
+void AVLTree<Key, Value>::remove(const Key& key) {
+  remove(root, key);
 }
 
 template <typename Key, typename Value>
