@@ -7,8 +7,8 @@
 // Struct defining a node in the binary search tree
 template <typename Key, typename Value>
 struct BSTNode {
-  Key key;                     // Key stored in the node
-  Value value;                 // Value stored in the node
+  Key key;                        // Key stored in the node
+  Value value;                    // Value stored in the node
   BSTNode<Key, Value>* left;      // Pointer to the left child node
   BSTNode<Key, Value>* right;     // Pointer to the right child node
   
