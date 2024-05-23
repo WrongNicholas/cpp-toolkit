@@ -8,3 +8,4 @@ This repository is my adventure into creating various data structures and algori
 - Stack
 ### Trees
 - Binary Search Tree
+- AVL Tree
