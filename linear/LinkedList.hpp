@@ -27,9 +27,9 @@ private:
 
 public:                                    
   // Constructors and Destructor           
-  LinkedList() : head(nullptr), tail(nullptr) {}            // Default constructor
+  LinkedList() : head(nullptr), tail(nullptr) {}                // Default constructor
   LinkedList(const LinkedList<Value> &other);                   // Copy constructor
-  ~LinkedList();                                            // Destructor
+  ~LinkedList();                                                // Destructor
    
   // Accessors
   Value& operator[](int index);                                 // Overloaded subscript operator
@@ -38,23 +38,23 @@ public:
   const Value& front() const;                                   // Returns value at the front of the list (const)
   Value& back();                                                // Returns value at the back of the list
   const Value& back() const;                                    // Returns value at the back of the list (const)
-  int size() const;                                         // Returns the number of elements in the list
-  bool empty() const;                                       // Checks if the list empty
+  int size() const;                                             // Returns the number of elements in the list
+  bool empty() const;                                           // Checks if the list empty
 
   // Mutators
   void push_front(const Value& value);                          // Adds a new element at the front of the list
   void push_back(const Value& value);                           // Adds a new element at the back of the list
   void insert(int index, const Value& value);                   // Adds a new element at the specified index
   void remove_all(const Value& value);                          // Removes all occurances of a value from the list
-  void remove_at(int index);                                // Removes the element at specified index
-  void pop_front();                                         // Removes the element at the front of the list
-  void pop_back();                                          // Removes the element at the back of the list
-  void clear();                                             // Removes all elements from the list
+  void remove_at(int index);                                    // Removes the element at specified index
+  void pop_front();                                             // Removes the element at the front of the list
+  void pop_back();                                              // Removes the element at the back of the list
+  void clear();                                                 // Removes all elements from the list
 
   // Utility
   int find(const Value& value) const;                           // Finds the index of the first occurance of a value
   bool contains(const Value& value) const;                      // Checks if the list contains a specific value
-  void print();                                             // Prints all elements in the list
+  void print();                                                 // Prints all elements in the list
 
   // Iterator
   class Iterator {
