@@ -56,7 +56,6 @@ public:
 };
 
 // Function definitions
-
 template <typename Key, typename Value>
 BSTNode<Key, Value>* BST<Key, Value>::get_node(const Key& key) {
   BSTNode<Key, Value>* current = root;

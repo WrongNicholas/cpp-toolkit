@@ -54,7 +54,7 @@ public:
   // Accessors
   Value& search(const Key& key);                                                                        // Returns the value associated with the given key from the list
   Value& search(const Key& key) const;                                                                  // Returns the value associated with the given key from the list (const)
-  bool empty() const;                                                                                  // Returns if the list is empty
+  bool empty() const;                                                                                   // Returns if the list is empty
 
   // Mutators
   void insert(const Key& key, const Value& value);                                                      // Inserts a new key-value pair into the tree
