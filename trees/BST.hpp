@@ -43,9 +43,6 @@ public:
   // Accessors
   Value& search(const Key& key);                                                  // Returns the value associated with the given key from the tree
   const Value& search(const Key& key) const;                                      // Returns the value associated with the given key from the tree (const)
-  const Value& get_min() const;                                                   // Returns the minimum value in the tree
-  const Value& get_max() const;                                                   // Returns the maximum value in the tree
-  const Value& get_root() const;                                                  // Returns the value of the root node
   
   // Mutators
   void insert(const Key& key, const Value& value);                                // Inserts a new key-value pair into the tree
@@ -198,21 +195,6 @@ Value& BST<Key, Value>::search(const Key& key) {
 template <typename Key, typename Value>
 const Value& BST<Key, Value>::search(const Key& key) const {
   return get_node(key)->value;
-}
-
-template <typename Key, typename Value>
-const Value& BST<Key, Value>::get_min() const {
-  return get_local_min(root)->value;
-}
-
-template <typename Key, typename Value>
-const Value& BST<Key, Value>::get_max() const {
-  return get_local_max(root)->value;
-}
-
-template <typename Key, typename Value>
-const Value& BST<Key, Value>::get_root() const {
-  return root->value;
 }
 
 template <typename Key, typename Value>
