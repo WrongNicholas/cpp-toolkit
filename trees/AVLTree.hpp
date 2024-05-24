@@ -54,10 +54,12 @@ public:
   // Accessors
   Value& search(const Key& key);                                                                        // Returns the value associated with the given key from the list
   Value& search(const Key& key) const;                                                                  // Returns the value associated with the given key from the list (const)
+  bool empty() const;                                                                                  // Returns if the list is empty
 
   // Mutators
   void insert(const Key& key, const Value& value);                                                      // Inserts a new key-value pair into the tree
   void remove(const Key& key);                                                                          // Removes a key-value pair from the tree
+  void replace(const Key& key, const Value& value);                                                     // Replaces a certain key with a different value
   void clear();                                                                                         // Clears the tree
 
   // Utility
@@ -307,6 +309,11 @@ Value& AVLTree<Key, Value>::search(const Key& key) const {
 }
 
 template <typename Key, typename Value>
+bool AVLTree<Key, Value>::empty() const {
+  return root == nullptr;
+}
+
+template <typename Key, typename Value>
 void AVLTree<Key, Value>::insert(const Key& key, const Value& value) {
   root = insert(root, key, value);
 }
@@ -314,6 +321,12 @@ void AVLTree<Key, Value>::insert(const Key& key, const Value& value) {
 template <typename Key, typename Value>
 void AVLTree<Key, Value>::remove(const Key& key) {
   remove(root, key);
+}
+
+template <typename Key, typename Value>
+void AVLTree<Key, Value>::replace(const Key& key, const Value& value) {
+  AVLTreeNode<Key, Value>* node = search(root, key);
+  node->value = value;
 }
 
 template <typename Key, typename Value>
