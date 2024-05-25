@@ -57,6 +57,7 @@ public:
   Value& search(const Key& key) const;                                                                  // Returns the value associated with the given key from the list (const)
   const bool empty() const;                                                                             // Returns if the list is empty
   const int size() const;                                                                               // Returns the size of the list
+  const int height() const;
 
   // Mutators
   void insert(const Key& key, const Value& value);                                                      // Inserts a new key-value pair into the tree
@@ -323,6 +324,13 @@ const bool AVLTree<Key, Value>::empty() const {
 template <typename Key, typename Value>
 const int AVLTree<Key, Value>::size() const {
   return tree_size;
+}
+
+template <typename Key, typename Value>
+const int AVLTree<Key, Value>::height() const {
+  if (root == nullptr) return 0;
+
+  return root->height;
 }
 
 template <typename Key, typename Value>
