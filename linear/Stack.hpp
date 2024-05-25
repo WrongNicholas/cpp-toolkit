@@ -21,8 +21,8 @@ public:
   void pop();                       // Remove the top item of the stack
   const T& peek() const;            // Peek at the top item of the stack (const)
   T& top();                         // Access the top item of the stack
-  bool empty();                     // Check if the stack is empty
-  int size();                       // Get the number of elements in the stack
+  const bool empty() const;         // Check if the stack is empty
+  const int size() const;           // Get the number of elements in the stack
   void clear();                     // Clear all elements from the stack
 };
 
@@ -57,12 +57,12 @@ const T& Stack<T>::peek() const {
 }
 
 template <typename T>
-bool Stack<T>::empty() {
+const bool Stack<T>::empty() const {
   return list.empty();
 }
 
 template <typename T>
-int Stack<T>::size() {
+const int Stack<T>::size() const {
   return list.size();
 }
 
