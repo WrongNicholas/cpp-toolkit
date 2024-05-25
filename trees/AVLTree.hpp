@@ -29,10 +29,11 @@ private:
   // Private Helper Functions
   AVLTreeNode<Key, Value>* search(AVLTreeNode<Key, Value>* node, const Key& key);                       // Finds a node with the given key
   AVLTreeNode<Key, Value>* search(AVLTreeNode<Key, Value>* node, const Key& key) const;                 // Finds a node with the given key (const)
+  const AVLTreeNode<Key, Value>* contains(AVLTreeNode<Key, Value>* node, const Key& key) const;         // Finds a node, but returns nullptr instead of throwing exception
   
-  int get_height(AVLTreeNode<Key, Value>* node) const;                                                  // Returns the height of the node
+  const int get_height(AVLTreeNode<Key, Value>* node) const;                                            // Returns the height of the node
   void update_height(AVLTreeNode<Key, Value>* node);                                                    // Updates the height of the node
-  int get_balance(AVLTreeNode<Key, Value>* node) const;                                                 // Returns the balance factor of the given node
+  const int get_balance(AVLTreeNode<Key, Value>* node) const;                                           // Returns the balance factor of the given node
   AVLTreeNode<Key, Value>* get_local_min(AVLTreeNode<Key, Value>* node);
 
   AVLTreeNode<Key, Value>* rotate_left(AVLTreeNode<Key, Value>* x);                                     // Performs a left rotation around the given node
@@ -54,7 +55,8 @@ public:
   ~AVLTree();                                                                                           // Destructor
   // Accessors
   Value& search(const Key& key);                                                                        // Returns the value associated with the given key from the list
-  Value& search(const Key& key) const;                                                                  // Returns the value associated with the given key from the list (const)
+  const Value& search(const Key& key) const;                                                            // Returns the value associated with the given key from the list (const)
+  const bool contains(const Key& key) const;                                                            // Returns if the given key exists in the list
   const bool empty() const;                                                                             // Returns if the list is empty
   const int size() const;                                                                               // Returns the size of the list
   const int height() const;
@@ -98,7 +100,17 @@ AVLTreeNode<Key, Value>* AVLTree<Key, Value>::search(AVLTreeNode<Key, Value>* no
 }
 
 template <typename Key, typename Value>
-int AVLTree<Key, Value>::get_height(AVLTreeNode<Key, Value>* node) const {
+const AVLTreeNode<Key, Value>* AVLTree<Key, Value>::contains(AVLTreeNode<Key, Value>* node, const Key& key) const {
+  if (node == nullptr) return nullptr;
+
+  if (key < node->key) return contains(node->left, key);
+  if (key > node->key) return contains(node->right, key);
+
+  return node;
+}
+
+template <typename Key, typename Value>
+const int AVLTree<Key, Value>::get_height(AVLTreeNode<Key, Value>* node) const {
   if (node == nullptr) return 0;
 
   return node->height;
@@ -112,7 +124,7 @@ void AVLTree<Key, Value>::update_height(AVLTreeNode<Key, Value>* node) {
 }
 
 template <typename Key, typename Value>
-int AVLTree<Key, Value>::get_balance(AVLTreeNode<Key, Value>* node) const {
+const int AVLTree<Key, Value>::get_balance(AVLTreeNode<Key, Value>* node) const {
   if (node == nullptr) return 0;
 
   return get_height(node->left) - get_height(node->right);
@@ -312,8 +324,13 @@ Value& AVLTree<Key, Value>::search(const Key& key) {
 }
 
 template <typename Key, typename Value>
-Value& AVLTree<Key, Value>::search(const Key& key) const {
+const Value& AVLTree<Key, Value>::search(const Key& key) const {
   return search(root, key)->value;
+}
+
+template <typename Key, typename Value>
+const bool AVLTree<Key, Value>::contains(const Key& key) const {
+  return contains(root, key) != nullptr;
 }
 
 template <typename Key, typename Value>
