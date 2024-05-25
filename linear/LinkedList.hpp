@@ -21,13 +21,15 @@ class LinkedList {
 private:
   ListNode<Value>* head;    // Pointer to the first node in the list
   ListNode<Value>* tail;    // Pointer to the last node in the list
+  int list_size;            // Size of the linked list
 
   // Private helper function to get node at a specific index
-  ListNode<Value>* get_node_at(int index) const;
+  const ListNode<Value>* get_node_at(int index) const;
+  ListNode<Value>* get_node_at(int index);
 
 public:                                    
   // Constructors and Destructor           
-  LinkedList() : head(nullptr), tail(nullptr) {}                // Default constructor
+  LinkedList() : head(nullptr), tail(nullptr), list_size(0) {}  // Default constructor
   LinkedList(const LinkedList<Value> &other);                   // Copy constructor
   ~LinkedList();                                                // Destructor
    
@@ -38,8 +40,8 @@ public:
   const Value& front() const;                                   // Returns value at the front of the list (const)
   Value& back();                                                // Returns value at the back of the list
   const Value& back() const;                                    // Returns value at the back of the list (const)
-  int size() const;                                             // Returns the number of elements in the list
-  bool empty() const;                                           // Checks if the list empty
+  const int size() const;                                       // Returns the number of elements in the list
+  const bool empty() const;                                     // Checks if the list empty
 
   // Mutators
   void push_front(const Value& value);                          // Adds a new element at the front of the list
@@ -52,8 +54,8 @@ public:
   void clear();                                                 // Removes all elements from the list
 
   // Utility
-  int find(const Value& value) const;                           // Finds the index of the first occurance of a value
-  bool contains(const Value& value) const;                      // Checks if the list contains a specific value
+  const int find(const Value& value) const;                     // Finds the index of the first occurance of a value
+  const bool contains(const Value& value) const;                // Checks if the list contains a specific value
   void print();                                                 // Prints all elements in the list
 
   // Iterator
@@ -85,7 +87,23 @@ public:
 };
 
 template <typename Value>
-ListNode<Value>* LinkedList<Value>::get_node_at(int index) const {
+const ListNode<Value>* LinkedList<Value>::get_node_at(int index) const {
+  if (index < 0) {
+    throw std::out_of_range("Index out of range");
+  }
+  
+  int count = 0;
+  for (auto node = begin(); node != end(); ++node, ++count) {
+    if (count == index) {
+      return node.get_node();
+    }
+  }
+
+  throw std::out_of_range("Index out of range");
+}
+
+template <typename Value>
+ListNode<Value>* LinkedList<Value>::get_node_at(int index){
   if (index < 0) {
     throw std::out_of_range("Index out of range");
   }
@@ -117,6 +135,7 @@ LinkedList<Value>::LinkedList(const LinkedList& other) : head(nullptr), tail(nul
   }
 
   this->tail = current;
+  this->size = other.size;
 }
 
 template <typename Value>
@@ -171,19 +190,18 @@ const Value& LinkedList<Value>::back() const {
 }
 
 template <typename Value>
-int LinkedList<Value>::size() const {
-  int count = 0;
-  for (auto element = begin(); element != end(); ++element, ++count);
-  return count;
+const int LinkedList<Value>::size() const {
+  return list_size;
 }
 
 template <typename Value>
-bool LinkedList<Value>::empty() const {
+const bool LinkedList<Value>::empty() const {
   return this->head == nullptr;
 }
 
 template <typename Value>
 void LinkedList<Value>::push_front(const Value& value) {
+  list_size++;
   ListNode<Value>* node = new ListNode<Value>(value);
   
   if (this->head == nullptr) {
@@ -198,6 +216,7 @@ void LinkedList<Value>::push_front(const Value& value) {
 
 template <typename Value>
 void LinkedList<Value>::push_back(const Value& value) {
+  list_size++;
   ListNode<Value>* node = new ListNode<Value>(value);
   
   if (this->head == nullptr) {
@@ -216,6 +235,7 @@ void LinkedList<Value>::insert(int index, const Value& value) {
     throw std::out_of_range("Index out of range");
   }
 
+  list_size++;
   if (index == 0) {
     this->push_front(value);
     return;
@@ -254,6 +274,8 @@ void LinkedList<Value>::remove_all(const Value& value) {
       ListNode<Value>* temp = current;
       current = current->next;
       delete temp;
+
+      list_size--;
     }
     else {
       previous = current;
@@ -268,6 +290,7 @@ void LinkedList<Value>::remove_at(int index) {
     throw std::out_of_range("Index out of range");
   }
 
+  list_size--;
   if (index == 0) {
     pop_front();
     return;
@@ -299,6 +322,7 @@ void LinkedList<Value>::pop_front() {
   }
 
   delete temp;
+  list_size--;
 }
 
 template <typename Value>
@@ -307,6 +331,7 @@ void LinkedList<Value>::pop_back() {
     throw std::out_of_range("List is empty");
   }
 
+  list_size--;
   if (this->head->next == nullptr) {
     delete this->head;
     this->head = nullptr;
@@ -335,10 +360,11 @@ void LinkedList<Value>::clear() {
 
   this->head = nullptr;
   this->tail = nullptr;
+  list_size = 0;
 }
 
 template <typename Value>
-int LinkedList<Value>::find(const Value& value) const {
+const int LinkedList<Value>::find(const Value& value) const {
   int count = 0;
   for (auto element = begin(); element != end(); ++element, ++count) {
     if (*element == value) {
@@ -350,7 +376,7 @@ int LinkedList<Value>::find(const Value& value) const {
 }
 
 template <typename Value>
-bool LinkedList<Value>::contains(const Value& value) const {
+const bool LinkedList<Value>::contains(const Value& value) const {
 
   for (auto element = begin(); element != end(); ++element) {
     if (*element == value) {
