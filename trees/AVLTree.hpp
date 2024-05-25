@@ -24,6 +24,7 @@ template <typename Key, typename Value>
 class AVLTree {
 private:
   AVLTreeNode<Key, Value>* root;      // Pointer to the root of the tree
+  int tree_size;                      // Stores number of key-value pairs in the tree
 
   // Private Helper Functions
   AVLTreeNode<Key, Value>* search(AVLTreeNode<Key, Value>* node, const Key& key);                       // Finds a node with the given key
@@ -49,12 +50,13 @@ private:
   void post_order(AVLTreeNode<Key, Value>* node);                                                       // Performs post-order traversal starting from the given node
 public:
   // Constructor and Destructor
-  AVLTree() : root(nullptr) {}                                                                          // Default constructor
+  AVLTree() : root(nullptr), tree_size(0) {}                                                            // Default constructor
   ~AVLTree();                                                                                           // Destructor
   // Accessors
   Value& search(const Key& key);                                                                        // Returns the value associated with the given key from the list
   Value& search(const Key& key) const;                                                                  // Returns the value associated with the given key from the list (const)
-  bool empty() const;                                                                                   // Returns if the list is empty
+  const bool empty() const;                                                                             // Returns if the list is empty
+  const int size() const;                                                                               // Returns the size of the list
 
   // Mutators
   void insert(const Key& key, const Value& value);                                                      // Inserts a new key-value pair into the tree
@@ -145,7 +147,10 @@ AVLTreeNode<Key, Value>* AVLTree<Key, Value>::rotate_right(AVLTreeNode<Key, Valu
 
 template <typename Key, typename Value>
 AVLTreeNode<Key, Value>* AVLTree<Key, Value>::insert(AVLTreeNode<Key, Value>* node, const Key& key, const Value& value) {
-  if (node == nullptr) return new AVLTreeNode<Key, Value>(key, value);
+  if (node == nullptr) { 
+    tree_size++;
+    return new AVLTreeNode<Key, Value>(key, value); 
+    }
 
   if (key < node->key) {
     node->left = insert(node->left, key, value);
@@ -188,7 +193,7 @@ AVLTreeNode<Key, Value>* AVLTree<Key, Value>::insert(AVLTreeNode<Key, Value>* no
 
 template <typename Key, typename Value>
 AVLTreeNode<Key, Value>* AVLTree<Key, Value>::remove(AVLTreeNode<Key, Value>* node, const Key& key) {
-  if (node == nullptr) return node;
+  if (node == nullptr) return nullptr;
 
   if (key < node->key) {
     node->left = remove(node->left, key);
@@ -196,6 +201,8 @@ AVLTreeNode<Key, Value>* AVLTree<Key, Value>::remove(AVLTreeNode<Key, Value>* no
     node->right = remove(node->right, key);
   }
   else {
+    tree_size--;
+
     if (node->left == nullptr && node->right == nullptr) {
       delete node;
       node = nullptr;
@@ -309,8 +316,13 @@ Value& AVLTree<Key, Value>::search(const Key& key) const {
 }
 
 template <typename Key, typename Value>
-bool AVLTree<Key, Value>::empty() const {
+const bool AVLTree<Key, Value>::empty() const {
   return root == nullptr;
+}
+
+template <typename Key, typename Value>
+const int AVLTree<Key, Value>::size() const {
+  return tree_size;
 }
 
 template <typename Key, typename Value>
@@ -333,6 +345,7 @@ template <typename Key, typename Value>
 void AVLTree<Key, Value>::clear() {
   clear(root);
   root = nullptr;
+  tree_size = 0;
 }
 
 template <typename Key, typename Value>
