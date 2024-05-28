@@ -28,7 +28,37 @@ public:
     void push_back(const T& element);
     void pop_back();
 
+    // Utility
     void print();
+
+    // Iterator
+    class Iterator {
+    private:
+        T* ptr;
+    public:
+        Iterator(T* ptr) : ptr(ptr) {}
+
+        Iterator& operator++() {
+            ++ptr;
+            return *this;
+        }
+
+        Iterator operator++(int) { 
+            Iterator temp = *this;
+            ++ptr;
+            return temp;
+        }
+
+        bool operator==(const Iterator& other) const { return ptr == other.ptr; }
+
+        bool operator!=(const Iterator& other) const { return ptr != other.ptr; } 
+
+        T& operator*() { return *ptr; }
+    };
+
+    Iterator begin() { return Iterator(data); }
+
+    Iterator end() { return Iterator(data + length); }
 };
 
 template <typename T>
