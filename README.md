@@ -5,8 +5,9 @@ This repository is my adventure into creating various data structures and algori
 ## Data Structures
 ### Linear
 - Linked List
-- Stack
 - Queue
+- Stack
+- Vector
 ### Trees
 - Binary Search Tree
 - AVL Tree
