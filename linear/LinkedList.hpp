@@ -21,7 +21,7 @@ class LinkedList {
 private:
   ListNode<Value>* head;    // Pointer to the first node in the list
   ListNode<Value>* tail;    // Pointer to the last node in the list
-  int list_size;            // Size of the linked list
+  size_t list_size;         // Size of the linked list
 
   // Private helper function to get node at a specific index
   const ListNode<Value>* get_node_at(int index) const;
@@ -40,7 +40,7 @@ public:
   const Value& front() const;                                   // Returns value at the front of the list (const)
   Value& back();                                                // Returns value at the back of the list
   const Value& back() const;                                    // Returns value at the back of the list (const)
-  const int size() const;                                       // Returns the number of elements in the list
+  const size_t size() const;                                    // Returns the number of elements in the list
   const bool empty() const;                                     // Checks if the list empty
 
   // Mutators
@@ -190,7 +190,7 @@ const Value& LinkedList<Value>::back() const {
 }
 
 template <typename Value>
-const int LinkedList<Value>::size() const {
+const size_t LinkedList<Value>::size() const {
   return list_size;
 }
 
