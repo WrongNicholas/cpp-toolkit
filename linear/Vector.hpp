@@ -16,6 +16,9 @@ private:
 
   // Private helper function to resize the array when the capacity is reached
   void resize();
+
+  // Private helper function to reserve a certain extra capacity
+  void reserve(size_t reserve_size);
 public:
   // Constructors and Destructor
   Vector();                                                 // Default constructor
@@ -31,6 +34,7 @@ public:
   // Mutators
   void push_back(const T& element);                         // Adds a new element at the end of the vector
   void pop_back();                                          // Removes the last element of the vector
+  void insert(int index, const T& element);                 // Inserts a new element at the specified index
 
   // Utility
   void print();                                             // Prints all elements in the vector
@@ -74,6 +78,14 @@ void Vector<T>::resize() {
 
   delete[] array;
   array = copy;
+}
+
+template <typename T>
+void Vector<T>::reserve(size_t reserve_size)
+{
+  while (capacity - length < reserve_size) {
+    resize();
+  }
 }
 
 template <typename T>
@@ -128,6 +140,20 @@ void Vector<T>::push_back(const T& element) {
 template <typename T>
 void Vector<T>::pop_back() {
   if (length > 0) length--;
+}
+
+template <typename T>
+void Vector<T>::insert(int index, const T &element)
+{
+  reserve(length + 1);
+
+  for (size_t i = length; i > index; i--) {
+    array[i] = array[i - 1];
+  }
+
+  array[index] = element;
+
+  ++length;
 }
 
 template <typename T>
