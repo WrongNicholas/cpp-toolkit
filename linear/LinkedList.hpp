@@ -8,7 +8,7 @@
 // Struct defining a node in linked list
 template <typename T>
 struct ListNode {
-  T value;      // T stored in the node
+  T value;          // Value stored in the node
   ListNode* next;   // Pointer to the next node in the list
   
   // Constructor to initialize the node with a value
@@ -19,8 +19,8 @@ struct ListNode {
 template <typename T>
 class LinkedList {
 private:
-  ListNode<T>* head;    // Pointer to the first node in the list
-  ListNode<T>* tail;    // Pointer to the last node in the list
+  ListNode<T>* head;        // Pointer to the first node in the list
+  ListNode<T>* tail;        // Pointer to the last node in the list
   size_t list_size;         // Size of the linked list
 
   // Private helper function to get node at a specific index
@@ -30,32 +30,32 @@ private:
 public:                                    
   // Constructors and Destructor           
   LinkedList() : head(nullptr), tail(nullptr), list_size(0) {}  // Default constructor
-  LinkedList(const LinkedList<T> &other);                   // Copy constructor
+  LinkedList(const LinkedList<T> &other);                       // Copy constructor
   ~LinkedList();                                                // Destructor
    
   // Accessors
-  T& operator[](int index);                                 // Overloaded subscript operator
-  const T& operator[](int index) const;                     // Overloaded const subscript operator
-  T& front();                                               // Returns value at the front of the list
-  const T& front() const;                                   // Returns value at the front of the list (const)
-  T& back();                                                // Returns value at the back of the list
-  const T& back() const;                                    // Returns value at the back of the list (const)
+  T& operator[](int index);                                     // Overloaded subscript operator
+  const T& operator[](int index) const;                         // Overloaded const subscript operator
+  T& front();                                                   // Returns value at the front of the list
+  const T& front() const;                                       // Returns value at the front of the list (const)
+  T& back();                                                    // Returns value at the back of the list
+  const T& back() const;                                        // Returns value at the back of the list (const)
   const size_t size() const;                                    // Returns the number of elements in the list
   const bool empty() const;                                     // Checks if the list empty
 
   // Mutators
-  void push_front(const T& value);                          // Adds a new element at the front of the list
-  void push_back(const T& value);                           // Adds a new element at the back of the list
-  void insert(int index, const T& value);                   // Adds a new element at the specified index
-  void remove_all(const T& value);                          // Removes all occurances of a value from the list
+  void push_front(const T& value);                              // Adds a new element at the front of the list
+  void push_back(const T& value);                               // Adds a new element at the back of the list
+  void insert(int index, const T& value);                       // Adds a new element at the specified index
+  void remove_all(const T& value);                              // Removes all occurances of a value from the list
   void remove_at(int index);                                    // Removes the element at specified index
   void pop_front();                                             // Removes the element at the front of the list
   void pop_back();                                              // Removes the element at the back of the list
   void clear();                                                 // Removes all elements from the list
 
   // Utility
-  const int find(const T& value) const;                     // Finds the index of the first occurance of a value
-  const bool contains(const T& value) const;                // Checks if the list contains a specific value
+  const int find(const T& value) const;                         // Finds the index of the first occurance of a value
+  const bool contains(const T& value) const;                    // Checks if the list contains a specific value
   void print();                                                 // Prints all elements in the list
 
   // Iterator
@@ -86,6 +86,7 @@ public:
   Iterator end() const { return Iterator(nullptr); }  // Returns a const iterator pointing to the end (nullptr)
 };
 
+// Function Definitions
 template <typename T>
 const ListNode<T>* LinkedList<T>::get_node_at(int index) const {
   if (index < 0) {
