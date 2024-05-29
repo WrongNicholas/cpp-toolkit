@@ -26,6 +26,7 @@ public:
   T& operator[](int index);                                 // Overloaded subscript operator
   const T& operator[](int index) const;                     // Overloaded const subscript operator
   const size_t size() const;                                // Returns the number of elements in the vector
+  const size_t current_capacity() const;                    // Returns the current capacity of the vector
 
   // Mutators
   void push_back(const T& element);                         // Adds a new element at the end of the vector
@@ -43,17 +44,10 @@ public:
     Iterator(T* ptr) : ptr(ptr) {}
 
     // Pre-increment operator
-    Iterator& operator++() {
-      ++ptr;
-      return *this;
-    }
+    Iterator& operator++() { ++ptr; return *this; }
 
     // Post-increment operator
-    Iterator operator++(int) { 
-      Iterator temp = *this;
-      ++ptr;
-      return temp;
-    }
+    Iterator operator++(int) { Iterator temp = *this; ++ptr; return temp; }
 
     // Equality operator
     bool operator==(const Iterator& other) const { return ptr == other.ptr; }
@@ -114,6 +108,12 @@ const T& Vector<T>::operator[](int index) const {
 template <typename T>
 const size_t Vector<T>::size() const {
   return length;
+}
+
+template <typename T>
+const size_t Vector<T>::current_capacity() const
+{
+    return capacity;
 }
 
 template <typename T>
