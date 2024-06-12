@@ -115,7 +115,6 @@ ListNode<T>* LinkedList<T>::get_node_at(int index){
       return node.get_node();
     }
   }
-
   throw std::out_of_range("Index out of range");
 }
 
