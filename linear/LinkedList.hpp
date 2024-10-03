@@ -26,7 +26,6 @@ private:
   // Private helper function to get node at a specific index
   const ListNode<T>* get_node_at(int index) const;
   ListNode<T>* get_node_at(int index);
-
 public:                                    
   // Constructors and Destructor           
   LinkedList() : head(nullptr), tail(nullptr), list_size(0) {}  // Default constructor
