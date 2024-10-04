@@ -4,10 +4,6 @@ Welcome to my **C++ Toolkit,** a collection of data structures and algorithms I'
 
 ## Data Structures
 ### Linear
-- Linked List
-- Queue
-- Stack
-- Vector
+- Singly Linked List, Doubly Linked List, Queue, Stack, Vector
 ### Trees
-- Binary Search Tree
-- AVL Tree
+- Binary Search Tree, AVL Tree
