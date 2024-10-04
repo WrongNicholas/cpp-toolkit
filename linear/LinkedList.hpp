@@ -24,17 +24,17 @@ private:
   size_t list_size;         // Size of the linked list
 
   // Private helper function to get node at a specific index
-  const ListNode<T>* get_node_at(int index) const;
-  ListNode<T>* get_node_at(int index);
+  const ListNode<T>* get_node_at(int) const;
+  ListNode<T>* get_node_at(int);
 public:                                    
   // Constructors and Destructor           
   LinkedList() : head(nullptr), tail(nullptr), list_size(0) {}  // Default constructor
-  LinkedList(const LinkedList<T> &other);                       // Copy constructor
+  LinkedList(const LinkedList<T>&);                       // Copy constructor
   ~LinkedList();                                                // Destructor
    
   // Accessors
-  T& operator[](int index);                                     // Overloaded subscript operator
-  const T& operator[](int index) const;                         // Overloaded const subscript operator
+  T& operator[](int);                                     // Overloaded subscript operator
+  const T& operator[](int) const;                         // Overloaded const subscript operator
   T& front();                                                   // Returns value at the front of the list
   const T& front() const;                                       // Returns value at the front of the list (const)
   T& back();                                                    // Returns value at the back of the list
@@ -43,18 +43,18 @@ public:
   const bool empty() const;                                     // Checks if the list empty
 
   // Mutators
-  void push_front(const T& value);                              // Adds a new element at the front of the list
-  void push_back(const T& value);                               // Adds a new element at the back of the list
-  void insert(int index, const T& value);                       // Adds a new element at the specified index
-  void remove_all(const T& value);                              // Removes all occurances of a value from the list
-  void remove_at(int index);                                    // Removes the element at specified index
+  void push_front(const T&);                              // Adds a new element at the front of the list
+  void push_back(const T&);                               // Adds a new element at the back of the list
+  void insert(int, const T&);                       // Adds a new element at the specified index
+  void remove_all(const T&);                              // Removes all occurances of a value from the list
+  void remove_at(int);                                    // Removes the element at specified index
   void pop_front();                                             // Removes the element at the front of the list
   void pop_back();                                              // Removes the element at the back of the list
   void clear();                                                 // Removes all elements from the list
 
   // Utility
-  const int find(const T& value) const;                         // Finds the index of the first occurance of a value
-  const bool contains(const T& value) const;                    // Checks if the list contains a specific value
+  const int find(const T&) const;                         // Finds the index of the first occurance of a value
+  const bool contains(const T&) const;                    // Checks if the list contains a specific value
   void print();                                                 // Prints all elements in the list
 
   // Iterator
