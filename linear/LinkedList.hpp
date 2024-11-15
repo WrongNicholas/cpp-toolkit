@@ -29,12 +29,12 @@ private:
 public:                                    
   // Constructors and Destructor           
   LinkedList() : head(nullptr), tail(nullptr), list_size(0) {}  // Default constructor
-  LinkedList(const LinkedList<T>&);                       // Copy constructor
+  LinkedList(const LinkedList<T>&);                             // Copy constructor
   ~LinkedList();                                                // Destructor
    
   // Accessors
-  T& operator[](int);                                     // Overloaded subscript operator
-  const T& operator[](int) const;                         // Overloaded const subscript operator
+  T& operator[](int);                                           // Overloaded subscript operator
+  const T& operator[](int) const;                               // Overloaded const subscript operator
   T& front();                                                   // Returns value at the front of the list
   const T& front() const;                                       // Returns value at the front of the list (const)
   T& back();                                                    // Returns value at the back of the list
@@ -43,18 +43,18 @@ public:
   const bool empty() const;                                     // Checks if the list empty
 
   // Mutators
-  void push_front(const T&);                              // Adds a new element at the front of the list
-  void push_back(const T&);                               // Adds a new element at the back of the list
-  void insert(int, const T&);                       // Adds a new element at the specified index
-  void remove_all(const T&);                              // Removes all occurances of a value from the list
-  void remove_at(int);                                    // Removes the element at specified index
+  void push_front(const T&);                                    // Adds a new element at the front of the list
+  void push_back(const T&);                                     // Adds a new element at the back of the list
+  void insert(int, const T&);                                   // Adds a new element at the specified index
+  void remove_all(const T&);                                    // Removes all occurances of a value from the list
+  void remove_at(int);                                          // Removes the element at specified index
   void pop_front();                                             // Removes the element at the front of the list
   void pop_back();                                              // Removes the element at the back of the list
   void clear();                                                 // Removes all elements from the list
 
   // Utility
-  const int find(const T&) const;                         // Finds the index of the first occurance of a value
-  const bool contains(const T&) const;                    // Checks if the list contains a specific value
+  const int find(const T&) const;                               // Finds the index of the first occurance of a value
+  const bool contains(const T&) const;                          // Checks if the list contains a specific value
   void print();                                                 // Prints all elements in the list
 
   // Iterator
@@ -79,10 +79,10 @@ public:
   };
 
   // Iterator methods
-  Iterator begin() { return Iterator(head); }         // Returns an iterator pointing to the first element
-  Iterator end() { return Iterator(nullptr); }        // Retrns an iterator pointing to the end (nullptr)
-  Iterator begin() const { return Iterator(head); }   // Returns a const iterator pointing to the first element
-  Iterator end() const { return Iterator(nullptr); }  // Returns a const iterator pointing to the end (nullptr)
+  Iterator begin() { return Iterator(head); }                 // Returns an iterator pointing to the first element
+  Iterator end() { return Iterator(nullptr); }                // Retrns an iterator pointing to the end (nullptr)
+  const Iterator begin() const { return Iterator(head); }     // Returns a const iterator pointing to the first element
+  const Iterator end() const { return Iterator(nullptr); }    // Returns a const iterator pointing to the end (nullptr)
 };
 
 // Function Definitions
@@ -114,6 +114,7 @@ ListNode<T>* LinkedList<T>::get_node_at(int index){
       return node.get_node();
     }
   }
+
   throw std::out_of_range("Index out of range");
 }
 
@@ -255,31 +256,32 @@ void LinkedList<T>::insert(int index, const T& value) {
 template <typename T>
 void LinkedList<T>::remove_all(const T& value) {
   ListNode<T>* current = this->head;
-  ListNode<T>* previous = nullptr;
+  ListNode<T>* prev = nullptr;
 
   while (current != nullptr) {
-    if (current->value == value) {
-      if (current == this->head) {
-        this->head = current->next;
-      }
-
-      if (current == tail) {
-        this->tail = previous; 
-      }
-
-      if (previous != nullptr) {
-        previous->next = current->next;
-      } 
-      ListNode<T>* temp = current;
+    if (current->value != value) {
+      prev = current;
       current = current->next;
-      delete temp;
+      continue;
+    }
 
-      list_size--;
+    ListNode<T>* delete_me = current;
+    current = current->next;
+
+    if (prev == nullptr) {
+      this->head = current;
     }
     else {
-      previous = current;
-      current = current->next;
+      prev->next = current;
+      
+      if (delete_me == this->tail) {
+        this->tail = prev;
+      }
+
+      delete delete_me;
+      this->list_size--;
     }
+
   }
 }
 
@@ -314,13 +316,15 @@ void LinkedList<T>::pop_front() {
   }
   
   ListNode<T>* temp = this->head;
+
   this->head = this->head->next;
   
   if (this->head == nullptr) {
     this->tail = nullptr;
   }
 
-  delete temp;
+  if (temp != nullptr)
+    delete temp;
   list_size--;
 }
 
