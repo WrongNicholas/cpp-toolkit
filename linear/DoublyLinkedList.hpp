@@ -237,17 +237,58 @@ void DoublyLinkedList<T>::remove_all(const T& value) {
 
 template <typename T>
 void DoublyLinkedList<T>::remove_at(int index) {
+  if (index < 0 || index >= this->list_size) {
+    throw std::out_of_range("Index out of range");
+  } 
 
+  if (index == 0) {
+    pop_front();
+    return;
+  }
+
+  ListNode<T>* temp = get_node_at(index);
+
+  if (temp == this->tail) {
+    pop_back();
+    return;
+  }
+
+  temp->prev->next = temp->next;
+  temp->next->prev = temp->prev;
+  delete temp;
 }
 
 template <typename T>
 void DoublyLinkedList<T>::pop_front() {
+  if (this->head == nullptr) return;
 
+  ListNode<T>* temp = this->head;
+
+  this->head = this->head->next;
+
+  if (this->head == nullptr) this->tail = nullptr;
+
+  if (temp != nullptr) {
+    delete temp;
+    this->list_size--;
+  }
 }
 
 template <typename T>
 void DoublyLinkedList<T>::pop_back() {
+  if (this->tail == nullptr) return;
 
+  ListNode<T>* temp = this->tail;
+
+  this->tail = this->tail->prev;
+  this->tail->next = nullptr;
+
+  if (this->tail == nullptr) this->head = nullptr;
+
+  if (temp != nullptr) {
+    delete temp;
+    this->list_size--;
+  }
 }
 
 template <typename T>
