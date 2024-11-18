@@ -10,6 +10,9 @@ struct ListNode {
   T value;          // Value stored in the node
   ListNode* next;   // Pointer to the next node in the list
   ListNode* prev;   // Pointer to the previous node in the list
+  
+  T& operator*() { return this->value; }
+  const T& operator*() const { return this->value; }
 
   // Constructor to initialize the node with a value
   ListNode(T value) : value(value), next(nullptr), prev(nullptr) {}
@@ -29,11 +32,18 @@ private:
 public:
   // Constructors and Destructor
   DoublyLinkedList() : head(nullptr), tail(nullptr), list_size(0) {}
+  DoublyLinkedList(const DoublyLinkedList<T>&);
   ~DoublyLinkedList();
 
   // Accessors
   T& operator[](int);
   const T& operator[](int) const;
+  T& front();
+  const T& front() const;
+  T& back();
+  const T& back() const;
+  const size_t size() const;
+  const bool empty() const;
 
   // Mutators
   void push_front(const T&);
@@ -46,6 +56,8 @@ public:
   void clear();
 
   // Utility
+  const int find(const T&) const;
+  const bool contains(const T&) const;
   void print();
   void print_reverse();
 
@@ -129,6 +141,26 @@ const ListNode<T>* DoublyLinkedList<T>::get_node_at(int index) const {
 }
 
 template <typename T>
+DoublyLinkedList<T>::DoublyLinkedList(const DoublyLinkedList<T>& other) : head(nullptr), tail(nullptr) {
+  if (other.head == nullptr) {
+    return;
+  }
+
+  this->head = new ListNode<T>(other.head->value);
+  ListNode<T>* current = this->head;
+  ListNode<T>* temp = other.head->next;
+
+  while (temp != nullptr) {
+    current->next = new ListNode<T>(temp->value);
+    current = current->next;
+    temp = temp->next;
+  }
+
+  this->tail = current;
+  this->size = other.size;
+}
+
+template <typename T>
 DoublyLinkedList<T>::~DoublyLinkedList() {
   clear();
 }
@@ -141,6 +173,38 @@ T& DoublyLinkedList<T>::operator[](int index) {
 template <typename T>
 const T& DoublyLinkedList<T>::operator[](int index) const {
   return this->get_node_at(index)->value;
+}
+
+template <typename T>
+T& DoublyLinkedList<T>::front() {
+  // I know the custom dereference operator is a bit confusing 
+  // but I think it's funny so I am keeping it lol
+  return **head;
+}
+
+template <typename T>
+const T& DoublyLinkedList<T>::front() const {
+  return **head;
+}
+
+template <typename T>
+T& DoublyLinkedList<T>::back() {
+  return **tail;
+}
+
+template <typename T>
+const T& DoublyLinkedList<T>::back() const {
+  return **tail;
+}
+
+template <typename T>
+const size_t DoublyLinkedList<T>::size() const {
+  return list_size;
+}
+
+template <typename T>
+const bool DoublyLinkedList<T>::empty() const {
+  return head == nullptr;
 }
 
 template <typename T>
@@ -303,6 +367,29 @@ void DoublyLinkedList<T>::clear() {
   this->head = nullptr;
   this->tail = nullptr;
   list_size = 0;
+}
+
+template <typename T>
+const int DoublyLinkedList<T>::find(const T& value) const {
+  int count = 0;
+  for (auto element = begin_head(); element != end(); ++element, ++count) {
+    if (*element == value) {
+      return count;
+    }
+  }
+
+  return -1;
+}
+
+template <typename T>
+const bool DoublyLinkedList<T>::contains(const T& value) const {
+  for (auto element = begin_head(); element != end(); ++element) {
+    if (*element == value) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 template <typename T>
