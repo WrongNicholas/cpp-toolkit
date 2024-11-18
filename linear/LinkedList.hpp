@@ -119,7 +119,7 @@ ListNode<T>* LinkedList<T>::get_node_at(int index){
 }
 
 template <typename T>
-LinkedList<T>::LinkedList(const LinkedList& other) : head(nullptr), tail(nullptr) {
+LinkedList<T>::LinkedList(const LinkedList<T>& other) : head(nullptr), tail(nullptr) {
   if (other.head == nullptr) {
     return;
   }
@@ -291,7 +291,6 @@ void LinkedList<T>::remove_at(int index) {
     throw std::out_of_range("Index out of range");
   }
 
-  list_size--;
   if (index == 0) {
     pop_front();
     return;
@@ -307,6 +306,7 @@ void LinkedList<T>::remove_at(int index) {
   }
   
   delete temp;
+  list_size--;
 }
 
 template <typename T>
@@ -323,9 +323,10 @@ void LinkedList<T>::pop_front() {
     this->tail = nullptr;
   }
 
-  if (temp != nullptr)
+  if (temp != nullptr) {
     delete temp;
-  list_size--;
+    this->list_size--;
+  }
 }
 
 template <typename T>
@@ -334,7 +335,6 @@ void LinkedList<T>::pop_back() {
     throw std::out_of_range("List is empty");
   }
 
-  list_size--;
   if (this->head->next == nullptr) {
     delete this->head;
     this->head = nullptr;
@@ -348,6 +348,7 @@ void LinkedList<T>::pop_back() {
   }
 
   delete this->tail;
+  this->list_size--;
   this->tail = current;
   this->tail->next = nullptr;
 }
@@ -363,7 +364,7 @@ void LinkedList<T>::clear() {
 
   this->head = nullptr;
   this->tail = nullptr;
-  list_size = 0;
+  this->list_size = 0;
 }
 
 template <typename T>
@@ -375,7 +376,7 @@ const int LinkedList<T>::find(const T& value) const {
     }
   }
 
-  throw std::runtime_error("T not found");
+  return -1;
 }
 
 template <typename T>
