@@ -5,6 +5,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <stack>
+
 // Struct defining a node in the AVL tree
 template <typename Key, typename Value>
 struct AVLTreeNode {
@@ -72,24 +74,22 @@ public:
   void pre_order();                                                                                     // Prints the list (pre-order)
   void post_order();                                                                                    // Prints the list (post-order)
   
-  // Iterator
+  /* Iterator (Implementation not yet complete)
   class Iterator {
   private:
     AVLTreeNode<Key, Value>* current;
     public:
     // Constructor
     Iterator(AVLTreeNode<Key, Value>* node) : current(node) { }
-    
-    // Dereference methods
-    const Value& value() const { return current->value; }
-    const Key& key() const { return current->key; }
-    
+     
     // Get the current node
-    AVLTreeNode<Key, Value>* get_node() { return current; }
+    AVLTreeNode<Key, Value>* operator*() { return current; }
     
     // Increment methods
-    Iterator& right() { current = current->right; return *this; }
-    Iterator& left() { current = current->left; return *this; }
+    // in-order traversal using stack
+    Iterator& operator++() {
+      
+    } 
 
     // Inequality operator
     bool operator!=(const Iterator& other) const { return current != other.current; }
@@ -100,7 +100,7 @@ public:
   Iterator end() { return Iterator(nullptr); }              // Returns an iterator pointing to the end (nullptr)
   const Iterator begin() const { return Iterator(root); }   // Returns a const iterator pointing to the root node
   const Iterator end() const { return Iterator(nullptr); }  // Returns a const iterator pointing to the end (nullptr)
-
+  */
 };
 
 // Function Definitions
