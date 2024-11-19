@@ -18,23 +18,23 @@ private:
   void resize();
 
   // Private helper function to reserve a certain extra capacity
-  void reserve(size_t reserve_size);
+  void reserve(size_t);
 public:
   // Constructors and Destructor
   Vector();                                                 // Default constructor
-  Vector(size_t capacity, size_t step);                     // Parameter constructor
+  Vector(size_t, size_t);                                   // Parameter constructor with capacity and step
   ~Vector();                                                // Destructor
 
   // Accessors
-  T& operator[](int index);                                 // Overloaded subscript operator
-  const T& operator[](int index) const;                     // Overloaded const subscript operator
+  T& operator[](int);                                       // Overloaded subscript operator
+  const T& operator[](int) const;                           // Overloaded const subscript operator
   const size_t size() const;                                // Returns the number of elements in the vector
   const size_t current_capacity() const;                    // Returns the current capacity of the vector
 
   // Mutators
-  void push_back(const T& element);                         // Adds a new element at the end of the vector
+  void push_back(const T&);                                 // Adds a new element at the end of the vector
   void pop_back();                                          // Removes the last element of the vector
-  void insert(int index, const T& element);                 // Inserts a new element at the specified index
+  void insert(int, const T&);                               // Inserts a new element at the specified index
 
   // Utility
   void print();                                             // Prints all elements in the vector
