@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include <stack>
+#include <vector>
 
 // Struct defining a node in the AVL tree
 template <typename Key, typename Value>
@@ -51,9 +51,11 @@ private:
   void in_order(AVLTreeNode<Key, Value>* node);                                                         // Performs in-order traversal starting from the given node
   void pre_order(AVLTreeNode<Key, Value>* node);                                                        // Performs pre-order traversal starting from the given node
   void post_order(AVLTreeNode<Key, Value>* node);                                                       // Performs post-order traversal starting from the given node
+  void to_vector(std::vector<std::pair<Key, Value>>&, AVLTreeNode<Key, Value>*);
 public:
   // Constructor and Destructor
   AVLTree() : root(nullptr), tree_size(0) {}                                                            // Default constructor
+  AVLTree(std::vector<std::pair<Key, Value>>);                                                          // Constructor from vector<pair>
   ~AVLTree();                                                                                           // Destructor
   // Accessors
   Value& search(const Key& key);                                                                        // Returns the value associated with the given key from the list
@@ -73,37 +75,92 @@ public:
   void in_order();                                                                                      // Prints the list (in-order)
   void pre_order();                                                                                     // Prints the list (pre-order)
   void post_order();                                                                                    // Prints the list (post-order)
+  std::vector<std::pair<Key, Value>> to_vector();                                                    // Returns the AVLTree as a vector
   
-  /* Iterator (Implementation not yet complete)
+  // Iterator 
   class Iterator {
-  private:
-    AVLTreeNode<Key, Value>* current;
-    public:
-    // Constructor
-    Iterator(AVLTreeNode<Key, Value>* node) : current(node) { }
-     
-    // Get the current node
-    AVLTreeNode<Key, Value>* operator*() { return current; }
+  private: 
+    AVLTreeNode<Key, Value>* current; // Pointer to the current node in the iteration
+    AVLTreeNode<Key, Value>* root;    // Pointer to the root node of the AVL Tree
+
+    // Private helper function to get next node in-order
+    AVLTreeNode<Key, Value>* next_in_order(AVLTreeNode<Key, Value>*, AVLTreeNode<Key, Value>*) {
+      if (current == nullptr || root == nullptr) return nullptr;
+
+      if (current->right != nullptr) {
+        AVLTreeNode<Key, Value>* node = current->right;
+        while (node->left != nullptr) {
+          node = node->left;
+        }
+        return node;
+      }
+
+      AVLTreeNode<Key, Value>* successor = nullptr;
+      AVLTreeNode<Key, Value>* ancestor = root;
+      while (ancestor != nullptr) {
+        if (current->key < ancestor->key) {
+          successor = ancestor;
+          ancestor = ancestor->left;
+        } else if (current->key > ancestor->key) {
+          ancestor = ancestor->right;
+        } else break;
+      }
+      return successor;
+    }
+
+  public:
+    // Constructors
+    Iterator() : current(nullptr), root(nullptr) { }
+    Iterator(AVLTreeNode<Key, Value>* root) : root(root) { 
+      AVLTreeNode<Key, Value>* node = root;
+      while (node != nullptr && node->left != nullptr) { 
+        node = node->left;
+      }
+      current = node;
+    }
     
-    // Increment methods
-    // in-order traversal using stack
-    Iterator& operator++() {
-      
-    } 
+    // Dereference operator (non-const value)
+    Value& operator*() const { return current->value; }
+    
+    // Get the current key
+    const Key& get_key() const { return current->key; }
+
+    // Get the current node
+    AVLTreeNode<Key, Value>* get_node() { return current; }
+   
+    // Get the current value
+    Value& get_value() { return current->value; }
+    const Value& get_value() const { return current->value; }
+
+    // Increment operator
+    Iterator& operator++() { 
+      if (root != nullptr) {
+        current = next_in_order(current, root);
+      }
+      return *this;
+    }
 
     // Inequality operator
     bool operator!=(const Iterator& other) const { return current != other.current; }
   };
+
 
   // Iterator methods
   Iterator begin() { return Iterator(root); }               // Returns an iterator pointing to the root node
   Iterator end() { return Iterator(nullptr); }              // Returns an iterator pointing to the end (nullptr)
   const Iterator begin() const { return Iterator(root); }   // Returns a const iterator pointing to the root node
   const Iterator end() const { return Iterator(nullptr); }  // Returns a const iterator pointing to the end (nullptr)
-  */
-};
+  
+}; 
 
 // Function Definitions
+template <typename Key, typename Value>
+AVLTree<Key, Value>::AVLTree(std::vector<std::pair<Key, Value>> vector) : root(nullptr) {
+  for (const auto& element : vector) {
+    insert(element.first, element.second);
+  }
+}
+
 template <typename Key, typename Value>
 AVLTree<Key, Value>::~AVLTree() {
   clear();
@@ -349,6 +406,16 @@ void AVLTree<Key, Value>::post_order(AVLTreeNode<Key, Value>* node) {
 }
 
 template <typename Key, typename Value>
+void AVLTree<Key, Value>::to_vector(std::vector<std::pair<Key, Value>>& vector, AVLTreeNode<Key, Value>* node) {
+  if (node == nullptr) return;
+  to_vector(vector, node->left);
+  vector.push_back(std::pair<Key, Value>(node->key, node->value));
+  to_vector(vector, node->right);
+}
+
+
+
+template <typename Key, typename Value>
 Value& AVLTree<Key, Value>::search(const Key& key) {
   return search(root, key)->value;
 }
@@ -419,6 +486,13 @@ template <typename Key, typename Value>
 void AVLTree<Key, Value>::post_order() {
   post_order(root);
   std::cout << std::endl;
+}
+
+template <typename Key, typename Value>
+std::vector<std::pair<Key, Value>> AVLTree<Key, Value>::to_vector() {
+  std::vector<std::pair<Key, Value>> vector;
+  to_vector(vector, this->root);
+  return vector;
 }
 
 #endif
