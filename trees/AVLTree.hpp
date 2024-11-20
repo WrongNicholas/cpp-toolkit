@@ -29,28 +29,28 @@ private:
   int tree_size;                      // Stores number of key-value pairs in the tree
 
   // Private Helper Functions
-  AVLTreeNode<Key, Value>* search(AVLTreeNode<Key, Value>* node, const Key& key);                       // Finds a node with the given key
-  AVLTreeNode<Key, Value>* search(AVLTreeNode<Key, Value>* node, const Key& key) const;                 // Finds a node with the given key (const)
-  const AVLTreeNode<Key, Value>* contains(AVLTreeNode<Key, Value>* node, const Key& key) const;         // Finds a node, but returns nullptr instead of throwing exception
+  AVLTreeNode<Key, Value>* search(AVLTreeNode<Key, Value>*, const Key&);                                // Finds a node with the given key
+  AVLTreeNode<Key, Value>* search(AVLTreeNode<Key, Value>*, const Key&) const;                          // Finds a node with the given key (const)
+  const AVLTreeNode<Key, Value>* contains(AVLTreeNode<Key, Value>*, const Key&) const;                  // Finds a node, but returns nullptr instead of throwing exception
   
-  const int get_height(AVLTreeNode<Key, Value>* node) const;                                            // Returns the height of the node
-  void update_height(AVLTreeNode<Key, Value>* node);                                                    // Updates the height of the node
-  const int get_balance(AVLTreeNode<Key, Value>* node) const;                                           // Returns the balance factor of the given node
-  AVLTreeNode<Key, Value>* get_local_min(AVLTreeNode<Key, Value>* node);
+  const int get_height(AVLTreeNode<Key, Value>*) const;                                                 // Returns the height of the node
+  void update_height(AVLTreeNode<Key, Value>*);                                                         // Updates the height of the node
+  const int get_balance(AVLTreeNode<Key, Value>*) const;                                                // Returns the balance factor of the given node
+  AVLTreeNode<Key, Value>* get_local_min(AVLTreeNode<Key, Value>*);                                     // Returns the local minimum of a certain branch
 
-  AVLTreeNode<Key, Value>* rotate_left(AVLTreeNode<Key, Value>* x);                                     // Performs a left rotation around the given node
-  AVLTreeNode<Key, Value>* rotate_right(AVLTreeNode<Key, Value>* y);                                    // Performs a right rotation around the given node
+  AVLTreeNode<Key, Value>* rotate_left(AVLTreeNode<Key, Value>*);                                       // Performs a left rotation around the given node
+  AVLTreeNode<Key, Value>* rotate_right(AVLTreeNode<Key, Value>*);                                      // Performs a right rotation around the given node
   
-  AVLTreeNode<Key, Value>* insert(AVLTreeNode<Key, Value>* node, const Key& key, const Value& value);   // Inserts a new key-value pair into the tree
-  AVLTreeNode<Key, Value>* remove(AVLTreeNode<Key, Value>* node, const Key& key);                       // Removes a key-value pair from the tree
+  AVLTreeNode<Key, Value>* insert(AVLTreeNode<Key, Value>*, const Key&, const Value&);                  // Inserts a new key-value pair into the tree
+  AVLTreeNode<Key, Value>* remove(AVLTreeNode<Key, Value>*, const Key&);                                // Removes a key-value pair from the tree
   
   // Utility
-  void clear(AVLTreeNode<Key, Value>* node);                                                            // Recursively deletes all nodes in the tree
+  void clear(AVLTreeNode<Key, Value>*);                                                                 // Recursively deletes all nodes in the tree
 
-  void print_node(AVLTreeNode<Key, Value>* node);                                                       // Prints the given node
-  void in_order(AVLTreeNode<Key, Value>* node);                                                         // Performs in-order traversal starting from the given node
-  void pre_order(AVLTreeNode<Key, Value>* node);                                                        // Performs pre-order traversal starting from the given node
-  void post_order(AVLTreeNode<Key, Value>* node);                                                       // Performs post-order traversal starting from the given node
+  void print_node(AVLTreeNode<Key, Value>*);                                                            // Prints the given node
+  void in_order(AVLTreeNode<Key, Value>*);                                                              // Performs in-order traversal starting from the given node
+  void pre_order(AVLTreeNode<Key, Value>*);                                                             // Performs pre-order traversal starting from the given node
+  void post_order(AVLTreeNode<Key, Value>*);                                                            // Performs post-order traversal starting from the given node
   void to_vector(std::vector<std::pair<Key, Value>>&, AVLTreeNode<Key, Value>*);
 public:
   // Constructor and Destructor
@@ -58,24 +58,24 @@ public:
   AVLTree(std::vector<std::pair<Key, Value>>);                                                          // Constructor from vector<pair>
   ~AVLTree();                                                                                           // Destructor
   // Accessors
-  Value& search(const Key& key);                                                                        // Returns the value associated with the given key from the list
-  const Value& search(const Key& key) const;                                                            // Returns the value associated with the given key from the list (const)
-  const bool contains(const Key& key) const;                                                            // Returns if the given key exists in the list
+  Value& search(const Key&);                                                                            // Returns the value associated with the given key from the list
+  const Value& search(const Key&) const;                                                                // Returns the value associated with the given key from the list (const)
+  const bool contains(const Key&) const;                                                                // Returns if the given key exists in the list
   const bool empty() const;                                                                             // Returns if the list is empty
   const int size() const;                                                                               // Returns the size of the list
   const int height() const;
 
   // Mutators
-  void insert(const Key& key, const Value& value);                                                      // Inserts a new key-value pair into the tree
-  void remove(const Key& key);                                                                          // Removes a key-value pair from the tree
-  void replace(const Key& key, const Value& value);                                                     // Replaces a certain key with a different value
+  void insert(const Key&, const Value&);                                                                // Inserts a new key-value pair into the tree
+  void remove(const Key&);                                                                              // Removes a key-value pair from the tree
+  void replace(const Key&, const Value&);                                                               // Replaces a certain key with a different value
   void clear();                                                                                         // Clears the tree
 
   // Utility
   void in_order();                                                                                      // Prints the list (in-order)
   void pre_order();                                                                                     // Prints the list (pre-order)
   void post_order();                                                                                    // Prints the list (post-order)
-  std::vector<std::pair<Key, Value>> to_vector();                                                    // Returns the AVLTree as a vector
+  std::vector<std::pair<Key, Value>> to_vector();                                                       // Returns the AVLTree as a vector
   
   // Iterator 
   class Iterator {
@@ -89,22 +89,28 @@ public:
 
       if (current->right != nullptr) {
         AVLTreeNode<Key, Value>* node = current->right;
+
         while (node->left != nullptr) {
           node = node->left;
         }
+
         return node;
       }
 
       AVLTreeNode<Key, Value>* successor = nullptr;
       AVLTreeNode<Key, Value>* ancestor = root;
+
       while (ancestor != nullptr) {
         if (current->key < ancestor->key) {
           successor = ancestor;
           ancestor = ancestor->left;
+
         } else if (current->key > ancestor->key) {
           ancestor = ancestor->right;
+
         } else break;
       }
+
       return successor;
     }
 
@@ -116,6 +122,7 @@ public:
       while (node != nullptr && node->left != nullptr) { 
         node = node->left;
       }
+
       current = node;
     }
     
