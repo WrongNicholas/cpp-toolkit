@@ -30,8 +30,7 @@ private:
 
   // Private Helper Functions
   AVLTreeNode<Key, Value>* search(AVLTreeNode<Key, Value>*, const Key&);                                // Finds a node with the given key
-  AVLTreeNode<Key, Value>* search(AVLTreeNode<Key, Value>*, const Key&) const;                          // Finds a node with the given key (const)
-  const AVLTreeNode<Key, Value>* contains(AVLTreeNode<Key, Value>*, const Key&) const;                  // Finds a node, but returns nullptr instead of throwing exception
+  const AVLTreeNode<Key, Value>* search(AVLTreeNode<Key, Value>*, const Key&) const;                          // Finds a node with the given key (const)
   
   const int get_height(AVLTreeNode<Key, Value>*) const;                                                 // Returns the height of the node
   void update_height(AVLTreeNode<Key, Value>*);                                                         // Updates the height of the node
@@ -173,32 +172,13 @@ AVLTree<Key, Value>::~AVLTree() {
   clear();
 }
 
-template <typename Key, typename Value>
-AVLTreeNode<Key, Value>* AVLTree<Key, Value>::search(AVLTreeNode<Key, Value>* node, const Key& key) {
-  if (node == nullptr) throw std::out_of_range("Key not found");
-
-  if (key < node->key) return search(node->left, key);
-  if (key > node->key) return search(node->right, key);
-
-  return node;
-}
 
 template <typename Key, typename Value>
-AVLTreeNode<Key, Value>* AVLTree<Key, Value>::search(AVLTreeNode<Key, Value>* node, const Key& key) const {
-  if (node == nullptr) throw std::out_of_range("Key not found");
-
-  if (key < node->key) return search(node->left, key);
-  if (key > node->key) return search(node->right, key);
-
-  return node;
-}
-
-template <typename Key, typename Value>
-const AVLTreeNode<Key, Value>* AVLTree<Key, Value>::contains(AVLTreeNode<Key, Value>* node, const Key& key) const {
+const AVLTreeNode<Key, Value>* AVLTree<Key, Value>::search(AVLTreeNode<Key, Value>* node, const Key& key) const {
   if (node == nullptr) return nullptr;
 
-  if (key < node->key) return contains(node->left, key);
-  if (key > node->key) return contains(node->right, key);
+  if (key < node->key) return search(node->left, key);
+  if (key > node->key) return search(node->right, key);
 
   return node;
 }
@@ -420,21 +400,23 @@ void AVLTree<Key, Value>::to_vector(std::vector<std::pair<Key, Value>>& vector, 
   to_vector(vector, node->right);
 }
 
-
-
 template <typename Key, typename Value>
 Value& AVLTree<Key, Value>::search(const Key& key) {
-  return search(root, key)->value;
+  AVLTreeNode<Key, Value>* result = search(root, key);
+  if (result == nullptr) throw std::out_of_range("Key not found!");
+  return result;
 }
 
 template <typename Key, typename Value>
 const Value& AVLTree<Key, Value>::search(const Key& key) const {
-  return search(root, key)->value;
+  AVLTreeNode<Key, Value>* result = search(root, key);
+  if (result == nullptr) throw std::out_of_range("Key not found!");
+  return result;
 }
 
 template <typename Key, typename Value>
 const bool AVLTree<Key, Value>::contains(const Key& key) const {
-  return contains(root, key) != nullptr;
+  return search(root, key) != nullptr;
 }
 
 template <typename Key, typename Value>
