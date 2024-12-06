@@ -135,7 +135,7 @@ LinkedList<T>::LinkedList(const LinkedList<T>& other) : head(nullptr), tail(null
   }
 
   this->tail = current;
-  this->size = other.size;
+  this->list_size = other.list_size;
 }
 
 template <typename T>
